@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'budgetwiser.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'budgetwiser.apps.annote.views.main'),
+    url(r'^write/', 'budgetwiser.apps.annote.views.write_comment'),
 )
