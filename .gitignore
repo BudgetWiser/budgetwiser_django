@@ -25,3 +25,8 @@ parts
 src/*.egg-info
 lib
 lib64
+
+# added by shavakan
+*.pyc
+*.swp
+*.json	# only to be used for local tests as of now
