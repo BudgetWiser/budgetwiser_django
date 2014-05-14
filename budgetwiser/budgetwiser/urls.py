@@ -1,10 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.http import HttpResponseRedirect
 
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', lambda request: HttpResponseRedirect('/annote')),
     url(r'^annote/', include('budgetwiser.apps.annote.urls')),
 
     # Media path
