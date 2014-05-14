@@ -1,0 +1,204 @@
+/* TITLE */
+
+#title-wrapper{
+    width:100%;
+    height:180px;
+    background:#f5f7f7;
+}
+#title-section{
+    width:1000px;
+    height:100%;
+    margin:0 auto;
+}
+#title-section *{
+    float:left;
+}
+#title-section .title-source{
+    font-size:15px;
+    font-weight:400;
+    color:#08b0d8;
+    margin-top:56px;
+}
+#title-section .title-date{
+    font-size:15px;
+    font-weight:400;
+    color:#8d9396;
+    margin-top:56px;
+}
+#title-section .title-date::before{
+    content:"\00a0\00b7 ";
+}
+#title-section .title-name{
+    font-size:28px;
+    font-weight:700;
+    color:#393d3e;
+    clear:both;
+    margin-top:16px;
+    padding-bottom:56px;
+}
+
+/* ARTICLE */
+
+#content-wrapper{
+    width:1000px;
+    margin:0 auto;
+    background:#fff;
+}
+#article-wrapper{
+    float:left;
+    width:700px;
+    position:relative;
+}
+#comment-wrapper{
+    float:right;
+    width:294px;
+    margin-left:6px;
+    position:relative;
+    overflow:visible;
+}
+#article-section{
+    font-size:16px;
+    font-weight:400;
+    letter-spacing:1px;
+    word-spacing:1px;
+    color:#3a3e3f;
+    line-height:26px;
+    margin-top:36px;
+    margin-bottom:72px;
+    position:relative;
+    z-index:10;
+}
+
+/* ARTICLE FACT CHECK LIST BUTTON */
+
+#button-section>button{
+    width:18px;
+    height:18px;
+    background:url("/media/res/btn_fc_list.png") 0 0 no-repeat;
+    text-indent:-9999px;
+    cursor:pointer;
+
+    position:absolute;
+    top:48px;
+    left:264px;
+    z-index:20;
+}
+#button-section>button:hover{
+    background-position:0 -18px;
+}
+
+/* ARTICLE FACT CHECK SUM SPAN */
+
+#fc-sum-section>span{
+    width:58px;
+    height:30px;
+    padding-left:30px;
+    padding-top:8px;
+    font-size:12px;
+    font-weight:700;
+    color:#303435;
+    background:url("/media/res/bg_fc_sum.png") 0 0 no-repeat;
+
+    position:absolute;
+    top:42px;
+    left:284px;
+    z-index:20;
+    display:none;
+}
+
+/* HIGHLIGHT SECTION */
+
+#highlight-section>span.hl-01{
+    background:rgba(255,202,17,0.2);
+    height:19px;
+    width:275px;
+
+    position:absolute;
+    top:39px;
+    left:0px;
+    z-index:5;
+    display:none;
+}
+
+/* ARTICLE MENU */
+
+#menu-section>div.menu-button{
+    width:72px;
+    height:42px;
+    padding-top:6px;
+    background:url("/media/res/bg_menu.png") 0 0 no-repeat;
+    display:none;
+    position:absolute;
+    z-index:20;
+}
+#menu-section>div.menu-button button{
+    width:36px;
+    height:36px;
+    float:left;
+    text-indent:-9999px;
+    cursor:pointer;
+}
+#menu-section>div.menu-button button.add-question{
+    background:url("/media/res/btn_add_q.png") 0 0 no-repeat;
+}
+#menu-section>div.menu-button button.add-factchecker{
+    background:url("/media/res/btn_add_c.png") 0 0 no-repeat;
+}
+#menu-section>div.menu-button button:hover{
+    background-position:0 -36px;
+}
+
+/* FACT CHECK LIST */
+
+#fc-list-section>div.fc-list-01{
+    width:246px;
+    height:246px;
+    padding:9px 3px 3px 3px;
+    background:url("/media/res/bg_fc_list.png") 0 0 no-repeat;
+    position:absolute;
+    top:68px;
+    left:150px;
+    z-index:20;
+    display:none;
+}
+#fc-list-section .fc-score{
+    font-size:24px;
+    font-weight:700;
+    color:#474a4e;
+    margin:16px auto;
+    text-align:center;
+}
+
+/* ARTICLE Q&A LIST BUTTON */
+
+#commbtn-section{
+    float:left;
+    width:38px;
+}
+#commbtn-section>li{
+    position:absolute;
+    z-index:20;
+    left:0;
+}
+#commbtn-section>li.test-01{top:44px;}
+#commbtn-section>li.test-02{top:95px;}
+#commbtn-section>li.test-03{top:224px;}
+#commbtn-section button{
+    float:left;
+    width:16px;
+    height:16px;
+    text-indent:-9999px;
+    background:url("/media/res/btn_comm_list.png") 0 0 no-repeat;
+    cursor:pointer;
+}
+#commbtn-section button:hover{
+    background-position:0 -16px;
+}
+#commbtn-section span.comm-num{
+    float:left;
+    font-size:10px;
+    font-weight:400;
+    color:#d4d5d6;
+    margin-top:2px;
+    margin-left:6px;
+}

@@ -1,0 +1,125 @@
+/*
+@font-face{
+    font-family:"NanumBarunGothic";
+    font-style:normal;
+    font-weight:400;
+    src:url("/media/fonts/NanumBarunGothic.eot");
+    src:url("/media/fonts/NanumBarunGothic.eot") format("embedded-opentype"),
+        url("/media/fonts/NanumBarunGothic.woff") format("woff"),
+        url("/media/fonts/NanumBarunGothic.ttf") format("truetype");
+}
+@font-face{
+    font-family:"NanumBarunGothic";
+    font-style:normal;
+    font-weight:600;
+    src:url("/media/fonts/NanumBarunGothicBold.eot");
+    src:url("/media/fonts/NanumBarunGothicBold.eot") format("embedded-opentype"),
+        url("/media/fonts/NanumBarunGothicBold.woff") format("woff"),
+        url("/media/fonts/NanumBarunGothicBold.ttf") format("truetype");
+}
+*/
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+::selection{
+    color:#191919;
+    background:rgba(255,202,17,0.5);
+}
+::-moz-selection{
+    color:#191919;
+    background:rgba(255,202,17,0.5);
+}
+*{
+    margin:0;
+    padding:0;
+    display:block;
+    overflow:visible;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+
+    font-family:"Nanum Gothic", sans-serif;
+    font-weight:400;
+
+    /* for better rendering */
+    text-rendering:optimizingLegibility;
+    text-shadow:0 0 1px rgba(0,0,0,0.05);
+    -webkit-text-stroke:0.1px;
+    -webkit-font-smoothing:subpixel-antialiased;
+}
+script, title, style{
+    display:none;
+}
+a{
+    text-decoration:none;
+}
+button{
+    border:0;
+    outline:none;
+}
+html, body{
+    width:100%;
+    min-width:1000px;
+    height:100%;
+    overflow:auto;
+    background:#fff;
+}
+#wrapper{
+    width:100%;
+    min-width:1000px;
+    border-bottom:20px solid #f5f7f7;
+}
+
+/* HEADER */
+
+#header-wrapper{
+    width:100%;
+    height:96px;
+    border-bottom:8px solid #f0f1f2;
+    box-sizing:content-box;
+    -moz-box-sizing:content-box;
+}
+#header-section{
+    width:1000px;
+    height:100%;
+    margin:0 auto;
+}
+#header-section *{
+    float:left;
+}
+#header-section .header-title{
+    width:143px;
+    text-indent:-9999px;
+    font-size:16px;
+    font-weight:800;
+    text-transform:uppercase;
+    padding-left:32px;
+    margin-top:39px;
+    background:url("/media/res/img_logo.png") left 50% no-repeat;
+}
+#header-section .header-subtitle{
+    font-size:13px;
+    font-weight:400;
+    color:#a0a2a3;
+    padding-right:24px;
+    margin-left:40px;
+    margin-top:41px;
+    background:url("/media/res/img_logo.png") left 50% no-repeat;
+}
+#header-section .header-subtitle{
+    background:url("/media/res/img_subtitle_deco.png") right 50% no-repeat;
+}
+#header-section .header-user{
+    float:right;
+    margin-top:30px;
+}
+#header-section .header-user>.user-name{
+    font-size:12px;
+    font-weight:400;
+    color:#6d7374;
+    margin-right:8px;
+    margin-top:11px;
+}
+#header-section .header-user>.user-image{
+    width:36px;
+    height:36px;
+    border-radius:18px;
+}

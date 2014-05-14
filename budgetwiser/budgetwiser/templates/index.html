@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/index.css">
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{STATIC_URL}}js/_index.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        Interface.initialize();
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div id="title-wrapper">
+    <div id="title-section">
+        <a href="{{article.s_url}}"class="title-source">
+            {{article.s_name}}
+        </a>
+        <time class="title-date">
+            {{article.date|date:"Y년 n월 j일 l"}}
+        </time>
+        <h4 class="title-name">
+            {{article.title}}
+        </h4>
+    </div>
+</div>
+<div id="content-wrapper">
+    <article id="article-wrapper">
+        <div id="article-section">
+            {% for p in paragraphs %}
+            <p id="p-{{p.id}}" class="article-paragraph">
+                {{p.content|linebreaks}}
+            </p>
+            {% endfor %}
+        </div>
+        <div id="button-section">
+            <button type="button" class="fc-btn-01">fact-check list</button>
+        </div>
+        <div id="fc-sum-section">
+            <span class="fc-sum-01">4.5</span>
+        </div>
+        <div id="highlight-section">
+            <span class="hl-01"></span>
+        </div>
+        <div id="menu-section">
+            <div class="menu-button">
+                <button type="button" class="add-question">Add question</button>
+                <button type="button" class="add-factchecker">Add Fact Checker</button>
+            </div>
+        </div>
+        <div id="fc-list-section">
+            <div class="fc-list-01">
+                <div class="fc-score">4.5</div>
+                <div class="fc-score-bar">
+                    <span class="ball"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul class="fc-url-list">
+                    <li>asdfasdf</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    <aside id="comment-wrapper">
+        <ul id="commbtn-section">
+            <li class="test-01">
+                <button type="button">comment button</button>
+                <span class="comm-num">12</span>
+            </li>
+            <li class="test-02">
+                <button type="button">comment button</button>
+                <span class="comm-num">4</span>
+            </li>
+            <li class="test-03">
+                <button type="button">comment button</button>
+                <span class="comm-num">7</span>
+            </li>
+        </ul>
+        <div id="commlist-section">
+        </div>
+    </aside>
+</div>
+{% endblock %}
