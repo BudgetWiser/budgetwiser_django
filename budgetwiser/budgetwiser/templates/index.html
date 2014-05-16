@@ -3,10 +3,10 @@
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/index.css">
 {% endblock %}
 {% block js %}
-<script type="text/javascript" src="{{STATIC_URL}}js/_index.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/index.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        Interface.initialize();
+        Article.DATA = {{data|safe}};
     });
 </script>
 {% endblock %}
@@ -29,7 +29,7 @@
         <div id="article-section">
             {% for p in paragraphs %}
             <p id="p-{{p.id}}" class="article-paragraph">
-                {{p.content|linebreaks}}
+                {{p.content}}
             </p>
             {% endfor %}
         </div>

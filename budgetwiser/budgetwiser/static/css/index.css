@@ -2,8 +2,9 @@
 
 #title-wrapper{
     width:100%;
-    height:180px;
+    min-height:180px;
     background:#f5f7f7;
+    overflow:hidden;
 }
 #title-section{
     width:1000px;
@@ -31,10 +32,12 @@
 #title-section .title-name{
     font-size:28px;
     font-weight:700;
+    line-height:36px;
     color:#393d3e;
     clear:both;
     margin-top:16px;
     padding-bottom:56px;
+    max-width:700px;
 }
 
 /* ARTICLE */
@@ -43,6 +46,7 @@
     width:1000px;
     margin:0 auto;
     background:#fff;
+    overflow:hidden;
 }
 #article-wrapper{
     float:left;
@@ -54,7 +58,6 @@
     width:294px;
     margin-left:6px;
     position:relative;
-    overflow:visible;
 }
 #article-section{
     font-size:16px;
@@ -67,6 +70,10 @@
     margin-bottom:72px;
     position:relative;
     z-index:10;
+}
+#article-section>p{
+    margin-bottom:24px;
+    position:relative;
 }
 
 /* ARTICLE FACT CHECK LIST BUTTON */
