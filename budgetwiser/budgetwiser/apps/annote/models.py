@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 class Article(models.Model):
     title = models.CharField(max_length=200)                # Title of the article
-    date = models.DateField()                               # Written date of the article
-    s_url = models.URLField()                               # Source URL
+    date = models.DateTimeField(auto_now=True)          # Written datetime of the article
+    s_url = models.URLField(null=False)                     # Source URL
     s_name = models.CharField(max_length=20)                # Source Name
-    user = models.ForeignKey('User', related_name="articles", null=True, blank=True)
+    user = models.ForeignKey(User, related_name="articles", null=True, blank=True)
 
     def __unicode__(self):
         return u'%s' % (self.title)
@@ -17,7 +17,7 @@ class Paragraph(models.Model):
     article = models.ForeignKey('Article', related_name="paragraphs")
     content = models.TextField()
 
-    c_count = models.IntegerField()                         # Comment Count
+    num_comments = models.IntegerField(default=0)                         # Comment Count
 
     def __unicode__(self):
         return u'%s' % (self.id)
@@ -27,18 +27,18 @@ class Comment(models.Model):
     COMMENT_TYPES = ((0, 'question'), (1, 'answer'),)
 
     writer = models.CharField(max_length=200)
-    typeof = models.IntegerField(choices=COMMENT_TYPES)
-    content = models.TextField()
+    typeof = models.IntegerField(choices=COMMENT_TYPES, null=False)
+    content = models.TextField(null=False)
     ref = models.URLField(null=True, blank=True)
     paragraph = models.ForeignKey('Paragraph', related_name="comments")
     rangeof = models.ForeignKey('Range', related_name="comments", null=True, blank=True)
     question = models.ForeignKey('Comment', related_name="answers", null=True, blank=True)
 
-    user = models.ForeignKey('User', related_name="articles", null=True, blank=True)
-    good = models.ManyToManyField('User', null=True, blank=True)
-    bad = models.ManyToManyField('User', null=True, blank=True)
-    g_count = models.IntegerField(default=0)                # Good reaction count
-    b_count = models.IntegerField(default=0)                # Bad reaction coutn
+    user = models.ForeignKey(User, related_name="comments", null=True, blank=True)
+    good = models.ManyToManyField(User, related_name="goods", null=True, blank=True)
+    bad = models.ManyToManyField(User, related_name="bads", null=True, blank=True)
+    num_goods = models.IntegerField(default=0)                # Good reaction count
+    num_bads = models.IntegerField(default=0)                 # Bad reaction coutn
 
 
 class Range(models.Model):
@@ -47,8 +47,8 @@ class Range(models.Model):
     end = models.IntegerField()
     paragraph = models.ForeignKey('Paragraph', related_name="ranges")
 
-    f_count = models.IntegerField()                         # Factcheck Count
-    f_average = models.FloatField()                         # Factcheck Average
+    num_factchk = models.IntegerField(default=0)              # Factcheck Count
+    avg_factchk = models.FloatField(default=0)                # Factcheck Average
 
 
 class Factcheck(models.Model):
@@ -56,11 +56,11 @@ class Factcheck(models.Model):
 
     score = models.IntegerField(choices=FACT_SCORES)
     ref = models.URLField(null=True, blank=True)
-    ref_score = models.IntegerField()
+    ref_score = models.IntegerField(default=0)
     rangeof = models.ForeignKey('Range', related_name="factchecks")
 
-    user = models.ForeignKey('User', related_name="articles", null=True, blank=True)
-    ref_users = models.ManyToManyField('User', null=True, blank=True)
+    user = models.ForeignKey(User, related_name="factchecks", null=True, blank=True)
+    ref_users = models.ManyToManyField(User, null=True, blank=True)
 
 
 # BEFORE AND AFTER, SAVE OR DELETE
@@ -68,30 +68,30 @@ class Factcheck(models.Model):
 def increase_comment_count(sender, **kwargs):
     c_obj = kwargs['instance']
     p_obj = c_obj.paragraph
-    p_obj.c_count += 1
+    p_obj.num_comments += 1
     p_obj.save()
 
 def decrease_comment_count(sender, **kwargs):
     c_obj = kwargs['instance']
     p_obj = c_obj.paragraph
-    p_obj.c_count -= 1
+    p_obj.num_comments -= 1
     p_obj.save()
 
 def increase_factcheck_count(sender, **kwargs):
     f_obj = kwargs['instance']
     r_obj = f_obj.rangeof
-    o_average = r_obj.f_average * r_obj.f_count
-    c_average = (o_average + f_obj.score)/(r_obj.f_count + 1)
-    r_obj.f_average = c_average
-    r_obj.f_count += 1
+    o_average = r_obj.avg_factchk * r_obj.num_factchk
+    c_average = (o_average + f_obj.score)/(r_obj.num_factchk + 1)
+    r_obj.avg_factchk = c_average
+    r_obj.num_factchk += 1
     r_obj.save()
 
 def decrease_factcheck_count(sender, **kwargs):
     f_obj = kwargs['instance']
     r_obj = f_obj.rangeof
-    o_average = r_obj.f_average * r_obj.f_count
-    c_average = (o_average - f_obj.score)/(r_obj.f_count - 1)
-    r_obj.f_average = c_average
+    o_average = r_obj.avg_factchk * r_obj.num_factchk
+    c_average = (o_average - f_obj.score)/(r_obj.num_factchk - 1)
+    r_obj.avg_factchk = c_average
     r_obj.f_count -= 1
     r_obj.save()
 

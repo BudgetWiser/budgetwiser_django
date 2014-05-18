@@ -22,7 +22,7 @@ def index(request, article_id):
         p_data = {
             'id': paragraph.id,
             'content': paragraph.content,
-            'c_count': paragraph.c_count,
+            'num_comments': paragraph.num_comments,
         }
         data['paragraphs'].append(p_data)
 
@@ -75,8 +75,8 @@ def save_range(request):
                 start=start,
                 end=end,
                 paragraph=paragraph,
-                f_count=0,
-                f_average=0,
+                num_factchk=0,
+                avg_factchk=0,
             )
             new_range.save()
 
