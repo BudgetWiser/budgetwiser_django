@@ -64,20 +64,134 @@
     </article>
     <aside id="comment-wrapper">
         <ul id="commbtn-section">
-            <li class="test-01">
-                <button type="button">comment button</button>
-                <span class="comm-num">12</span>
-            </li>
-            <li class="test-02">
-                <button type="button">comment button</button>
-                <span class="comm-num">4</span>
-            </li>
-            <li class="test-03">
-                <button type="button">comment button</button>
-                <span class="comm-num">7</span>
-            </li>
+			{% for p in paragraphs %}
+			<li class="comment-summary-{{p.id}}">
+				<button type="button">comment button</button>
+				<span class="comm-num">{{p.num_comments}}</span>
+			</li>
+			{% endfor %}
         </ul>
-        <div id="commlist-section">
+        <div id="cmntlist-section">
+			<!-- Static Comment List -->
+			<div id="cmnt-family">
+				<div id="cmnt-question">
+					<img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+					<div class="cmnt-section">
+						<span class="user-name">정종혁 (heretor92)</span>
+						<div id="cmnt-content-section">
+							<p id="comment-test01"> 
+							<span class="cmnt-type">Q.&nbsp;</span>
+							<span class="cmnt-content">국정과제, 지역공약, 경제혁신, 통일기반에 투자를 집중한다는게 어떤 의미를 가지고 있습니까?</span>
+							</p>
+						</div>
+						<div id="cmnt-response-section">
+							<p class="cmnt-response">
+							<span class="cmnt-vote">공감하기</span>
+							<span class="cmnt-numvotes">10명</span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div id="cmnt-answer">
+					<img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+					<div class="cmnt-section">
+						<span class="user-name">정종혁 (heretor92)</span>
+						<div id="cmnt-content-section">
+							<p id="comment-test03">
+							<span class="cmnt-type">A.&nbsp;</span>
+							<span class="cmnt-content">국정과제는 국정에서 하는 일을 말하는데요, 보통 이런 것과 저런 것이 있습니다.<br>이런 것들에 좀 더 집중하겠다는 의미를 띄고 있네요.</span>
+							<a class="cmnt-reference" href="http://blog.naver.com/re_code/100209376508">http://blog.naver.com/re_code/100209376508</a>
+							</p>
+						</div>
+						<div id="cmnt-response-section">
+							<p class="cmnt-response">
+							<span class="cmnt-vote">공감하기</span>
+							<span class="cmnt-numvotes">15명</span>
+							<span class="cmnt-numvotes">&nbsp;/&nbsp;</span>
+							<span class="cmnt-vote">이의제기</span>
+							<span class="cmnt-numvotes">1명</span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div id="cmnt-answer">
+					<img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+					<div class="cmnt-section">
+						<span class="user-name">이창원 (shavakan)</span>
+						<div id="cmnt-content-section">
+							<p id="comment-test05">
+							<span class="cmnt-type">A.&nbsp;</span>
+							<span class="cmnt-content">지역 공역은 지역을 위합니다.</span>
+							<a class="cmnt-reference" href="https://dribble.com/shots/1546149-Hubble-Animations?list=shots&sort=popular&timeframe=now&offset=10">https://dribble.com/shots/1546149-Hubble-Animations?list=shots&sort=popular&timeframe=now&offset=10</a>
+							</p>
+						</div>
+						<div id="cmnt-response-section">
+							<p class="cmnt-response">
+							<span class="cmnt-vote">공감하기</span>
+							<span class="cmnt-numvotes">&nbsp;/&nbsp;</span>
+							<span class="cmnt-vote">이의제기</span>
+							<span class="cmnt-numvotes">9명</span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div id="cmnt-answer">
+					<img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+					<div class="cmnt-section">
+						<span class="user-name">류승룡 (ryudragon12)</span>
+						<div id="cmnt-content-section">
+							<form id="cmnt-reply">
+							<span class="cmnt-type">A.&nbsp;</span>
+								<textarea id="cmnt-reply-content" class="cmnt-content">답변을 입력해주세요.</textarea>
+								<input type="text" id="cmnt-reference" value="정보의 출처를 입력해주세요.">
+								<div id="cmnt-reply-btn-section">
+									<input type="submit" value="답변 남기기" id="cmnt-reply-btn">
+									<button id="cmnt-cancel-btn">취소하기</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="cmnt-family">
+				<div id="cmnt-question">
+					<img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+					<div class="cmnt-section">
+						<span class="user-name">정종혁 (heretor92)</span>
+						<div id="cmnt-content-section">
+							<p id="comment-test06">
+							<span class="cmnt-type">Q.&nbsp;</span>
+							<span class="cmnt-content">지역 공약에는 무엇이 있을까요?</span>
+							</p>
+						</div>
+						<div id="cmnt-response-section">
+							<p class="cmnt-response">
+							<span class="cmnt-vote">공감하기</span>
+							</p>
+						</div>
+						<div id="cmnt-answer-btn-section">
+							<img id="cmnt-answer-img" src="/media/res/img_user_thumbnail_test01.png">
+							<button id="cmnt-answer-btn">답변 남기기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="cmnt-family">
+				<div id="cmnt-question">
+					<img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+					<div class="cmnt-section">
+						<span class="user-name">질문 남기기</span>
+						<div id="cmnt-content-section">
+							<span class="cmnt-type">A.&nbsp;</span>
+							<form id="cmnt-write" >
+								<label>먼저 질문할 부분을 드래깅하세요.</label>
+								<textarea id="cmnt-write-content" style="display: none;">코멘트를 입력하세요.</textarea>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Static Comment List -->
         </div>
     </aside>
 </div>
