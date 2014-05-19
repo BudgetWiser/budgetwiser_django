@@ -249,7 +249,6 @@
     float: left;
     width: 28px;
     height: 28px;
-    margin-top: 2px;
     border-radius: 14px;
 }
 #cmnt-response-section {
@@ -261,10 +260,26 @@
     color: #a0a8aa;
     resize: none;
 }
+#cmnt-reply-btn-section {
+    margin-top: 10px;
+}
 #cmnt-reply-btn {
     float: left;
+    border: 0px;
+    outline: none;
+    background: none;
+    color: #08afd8;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 10px;
 }
-#cmnt-cancel-ctn {
+#cmnt-cancel-btn {
+    border: 0px;
+    outline: none;
+    background: none;
+    color: #08afd8;
+    font-size: 12px;
+    cursor: pointer;
 }
 #cmnt-answer-img {
     float: left;
@@ -274,8 +289,11 @@
 }
 #cmnt-answer-btn {
     margin-left: 6px;
-}
-#cmnt-write-content {
+    border: 0px;
+    outline: none;
+    background: none;
+    color: #08afd8;
+    cursor: pointer;
 }
 .cmnt-content {
     height: 100%;
@@ -306,12 +324,12 @@
 .cmnt-vote {
     float: left;
     margin-right: 3px;
-    font-size: 14px;
+    font-size: 12px;
     color: #00627a;
 }
 .cmnt-numvotes {
     float: left;
     margin-right: 2px;
-    font-size: 14px;
+    font-size: 12px;
     color: #a3aaac;
 }

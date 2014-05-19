@@ -65,7 +65,7 @@
     <aside id="comment-wrapper">
         <ul id="commbtn-section">
 			{% for p in paragraphs %}
-			<li class="comment-summary-{{p.id}}">
+			<li class="comment-summary" id="cmnt-summary-{{p.id}}">
 				<button type="button">comment button</button>
 				<span class="comm-num">{{p.num_comments}}</span>
 			</li>
