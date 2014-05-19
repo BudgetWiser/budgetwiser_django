@@ -178,8 +178,31 @@ Article.loadComments = function(comments_all) {
 			var a_answer_type = $("<span class='cmnt-type'>A.&nbsp;</span>");
 			var a_answer_content = $("<textarea class='cmnt-content' style='border: none;'>답변을 입력해주세요.</textarea>");
 			a_answer_content.attr("id", "cmnt-answer-content");
+			a_answer_content.focus(function() {
+				if ($(this).val() === "답변을 입력해주세요.") {
+					$(this).val("");
+				}
+			});
+			a_answer_content.on('blur', function() {
+				if ($(this).val() === "") {
+					$(this).val("답변을 입력해주세요.");
+				}
+			});
+			a_answer_content.on('key', function() {
+				
+			});
 			var a_answer_ref = $("<input type='text' class='cmnt-reference' style='border: none;' value='정보의 출처를 입력해주세요.'>");
 			a_answer_ref.attr("id", "cmnt-answer-ref");
+			a_answer_ref.focus(function() {
+				if ($(this).val() === "정보의 출처를 입력해주세요.") {
+					$(this).val("");
+				}
+			});
+			a_answer_ref.on('blur', function() {
+				if ($(this).val() === "") {
+					$(this).val("정보의 출처를 입력해주세요.");
+				}
+			});
 			var a_answer_btn_section = $("<div class='cmnt-answer-btn-section'></div>");
 			var a_answer_submit = $("<input type='submit' value='답변 남기기'>");
 			a_answer_submit.attr("id", "cmnt-answer-submit-" + comments_all[i]['id']);
