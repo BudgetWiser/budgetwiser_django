@@ -181,6 +181,7 @@
 #commbtn-section{
     float:left;
     width:38px;
+    position:relative;
 }
 #commbtn-section>li{
     position:absolute;
@@ -215,55 +216,55 @@
 #cmntlist-section {
     margin-left: 44px;
 }
-#cmnt-family {
+.cmnt-family {
     margin-top: 18px;
 }
-#cmnt-family span.user-name {
+.cmnt-family span.user-name {
     margin-bottom: 2px;
 }
-#cmnt-question {
+.cmnt-question {
     margin-bottom: 5px;
 }
-#cmnt-question .cmnt-section {
+.cmnt-question .cmnt-section {
     margin-left: 38px;
     font-size: 14px;
     line-height: 140%;
 }
-#cmnt-answer {
+.cmnt-answer {
     margin-left: 36px;
     margin-bottom: 5px;
 }
-#cmnt-answer .cmnt-section {
+.cmnt-answer .cmnt-section {
     margin-left: 32px;
     font-size: 14px;
     line-height: 140%;
 }
-#cmnt-question .user-image {
+.cmnt-question .user-image {
     float: left;
     width: 32px;
     height: 32px;
     margin-top: 2px;
     border-radius: 16px;
 }
-#cmnt-answer .user-image {
+.cmnt-answer .user-image {
     float: left;
     width: 28px;
     height: 28px;
     border-radius: 14px;
 }
-#cmnt-response-section {
+.cmnt-response-section {
     display: inline-block;
 }
-#cmnt-reply-content {
+#cmnt-answer-content {
     width: 161px;
     font-size: 14px;
     color: #a0a8aa;
     resize: none;
 }
-#cmnt-reply-btn-section {
+.cmnt-answer-btn-section {
     margin-top: 10px;
 }
-#cmnt-reply-btn {
+.cmnt-answer-btn-section>input {
     float: left;
     border: 0px;
     outline: none;
@@ -273,7 +274,7 @@
     font-size: 12px;
     margin-right: 10px;
 }
-#cmnt-cancel-btn {
+.cmnt-answer-btn-section>button {
     border: 0px;
     outline: none;
     background: none;
@@ -281,7 +282,7 @@
     font-size: 12px;
     cursor: pointer;
 }
-#cmnt-answer-img {
+.cmnt-answer-img {
     float: left;
     width: 24px;
     height: 24px;
@@ -289,6 +290,15 @@
 }
 #cmnt-answer-btn {
     margin-left: 6px;
+    border: 0px;
+    outline: none;
+    background: none;
+    color: #08afd8;
+    cursor: pointer;
+}
+#cmnt-write>input {
+    margin-left: 18px;
+    margin-top: 6px;
     border: 0px;
     outline: none;
     background: none;

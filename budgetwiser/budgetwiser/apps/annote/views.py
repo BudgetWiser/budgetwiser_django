@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-from budgetwiser.apps.annote.models import Article, Range
+from budgetwiser.apps.annote.models import Article, Range, Paragraph, Comment
 
 def index(request, article_id):
     article = Article.objects.get(id=article_id)
@@ -116,3 +116,40 @@ def get_factcheck(request):
         return HttpResponse(factcheck_list_json)
     except:
         return HttpResponseBadRequest("Something wrong with 'get_factcheck'")
+
+def load_comment(request):
+    try:
+        paragraph_id = request.GET.get('id', None)
+        paragraph = Paragraph.objects.get(id=paragraph_id)
+        comment_list = []
+
+        for comment in paragraph.comments.filter(typeof=0):     # Only select question
+            comment_obj = {
+                'id': comment.id,
+                'user': comment.user.username,
+                'typeof': comment.typeof,
+                'content': comment.content,
+                'ref': comment.ref,
+                'num_goods': comment.num_goods,
+            }
+            child_list = []
+            for child in comment.answers.all():
+                child_obj = {
+                    'id': child.id,
+                    'user': child.user.username,
+                    'typeof': child.typeof,
+                    'content': comment.content,
+                    'ref': child.ref,
+                    'num_goods': child.num_goods,
+                    'num_bads': child.num_bads,
+                }
+                child_list.append(child_obj)
+            comment_obj['answers'] = child_list
+
+            comment_list.append(comment_obj)
+
+        comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
+        return HttpResponse(comment_list_json)
+    except:
+        return HttpResponseBadRequest("Really fucked")
