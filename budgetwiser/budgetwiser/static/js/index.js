@@ -9,18 +9,7 @@ Article.initialize = function(){
 	Article.fc_list = $(".fc-list-01");
 
 	/* Handling for bizzard behavior of comment list alignment */
-	var i=0;
-	var timer = setInterval(function() {
-		Article.alignCommentList();
-		console.log("align!\n");
-		if (i++ > 500)
-			clearInterval(timer);
-	}, 1);
-	Article.registerBtns();
-};
-
-Article.registerBtns = function() {
-	Article.btnCommentList();
+	Article.alignCommentList();
 };
 
 Article.alignCommentList = function() {
@@ -34,6 +23,7 @@ Article.alignCommentList = function() {
 			'top': pOfs.top + 40
 		});
 	}
+	Article.btnCommentList();
 };
 
 /* This function should be moved inside alignCommentList()
@@ -178,6 +168,7 @@ Article.loadComments = function(comments_all) {
 			var a_answer_type = $("<span class='cmnt-type'>A.&nbsp;</span>");
 			var a_answer_content = $("<textarea class='cmnt-content' style='border: none;'>답변을 입력해주세요.</textarea>");
 			a_answer_content.attr("id", "cmnt-answer-content");
+			a_answer_content.attr("class", "textarea-transition");
 			a_answer_content.focus(function() {
 				if ($(this).val() === "답변을 입력해주세요.") {
 					$(this).val("");
@@ -188,8 +179,8 @@ Article.loadComments = function(comments_all) {
 					$(this).val("답변을 입력해주세요.");
 				}
 			});
-			a_answer_content.on('key', function() {
-				
+			a_answer_content.on('keydown', function() {
+				$(this).autosize();
 			});
 			var a_answer_ref = $("<input type='text' class='cmnt-reference' style='border: none;' value='정보의 출처를 입력해주세요.'>");
 			a_answer_ref.attr("id", "cmnt-answer-ref");
@@ -206,6 +197,9 @@ Article.loadComments = function(comments_all) {
 			var a_answer_btn_section = $("<div class='cmnt-answer-btn-section'></div>");
 			var a_answer_submit = $("<input type='submit' value='답변 남기기'>");
 			a_answer_submit.attr("id", "cmnt-answer-submit-" + comments_all[i]['id']);
+			a_answer_submit.click(function() {
+
+			});
 			var a_answer_cancel = $("<button id='cmnt-answer-cancel'>취소하기</button>");
 			a_answer_cancel.attr("id", "cmnt-answer-cancel");
 

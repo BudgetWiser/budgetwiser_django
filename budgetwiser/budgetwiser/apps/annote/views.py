@@ -117,39 +117,80 @@ def get_factcheck(request):
     except:
         return HttpResponseBadRequest("Something wrong with 'get_factcheck'")
 
+
+def _load_comment(paragraph_id):
+    paragraph = Paragraph.objects.get(id=paragraph_id)
+    comment_list = []
+
+    for comment in paragraph.comments.filter(typeof=0):     # Only select question
+        comment_obj = {
+            'id': comment.id,
+            'user': comment.user.username,
+            'typeof': comment.typeof,
+            'content': comment.content,
+            'ref': comment.ref,
+            'num_goods': comment.num_goods,
+        }
+        child_list = []
+        for child in comment.answers.all():
+            child_obj = {
+                'id': child.id,
+                'user': child.user.username,
+                'typeof': child.typeof,
+                'content': comment.content,
+                'ref': child.ref,
+                'num_goods': child.num_goods,
+                'num_bads': child.num_bads,
+            }
+            child_list.append(child_obj)
+        comment_obj['answers'] = child_list
+
+        comment_list.append(comment_obj)
+
+    comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
+    return comment_list_json
+
+
 def load_comment(request):
     try:
-        paragraph_id = request.GET.get('id', None)
-        paragraph = Paragraph.objects.get(id=paragraph_id)
-        comment_list = []
-
-        for comment in paragraph.comments.filter(typeof=0):     # Only select question
-            comment_obj = {
-                'id': comment.id,
-                'user': comment.user.username,
-                'typeof': comment.typeof,
-                'content': comment.content,
-                'ref': comment.ref,
-                'num_goods': comment.num_goods,
-            }
-            child_list = []
-            for child in comment.answers.all():
-                child_obj = {
-                    'id': child.id,
-                    'user': child.user.username,
-                    'typeof': child.typeof,
-                    'content': comment.content,
-                    'ref': child.ref,
-                    'num_goods': child.num_goods,
-                    'num_bads': child.num_bads,
-                }
-                child_list.append(child_obj)
-            comment_obj['answers'] = child_list
-
-            comment_list.append(comment_obj)
-
-        comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+        comment_list_json = _load_comment(request.GET.get('id', None))
 
         return HttpResponse(comment_list_json)
+    except:
+        return HttpResponseBadRequest("Error in load_comment()")
+
+
+def write_answer(request):
+    try:
+        typeof = 1
+        content = request.POST.get('content', None)
+        ref = request.POST.get('ref', None)
+        user = User.objects.filter(id=request.POST.get('user_id', None))
+        paragraph = Paragraph.objects.filter(id=request.POST.get('paragraph_id', None))
+        question = Comment.objects.filter(id=request.POST.get('parent_id', None))
+        rangeof = Range.objects.filter(id=question.rangeof.id)
+
+        new_comment = Comment (
+            typeof = typeof,
+            content = content,
+            ref = ref,
+            paragraph = paragraph,
+            rangeof = rangeof,
+            question = question,
+            user = user
+        )
+        new_comment.save()
+
+        comment_list_json = _load_comment(request.POST.get('paragraph_id', None))
+
+        return HttpResponse(comment_list_json)
+    except:
+        return HttpResponseBadRequest("Really fucked")
+
+def write_question(request):
+    try:
+    
+        return HttpResponse("hahaha")
     except:
         return HttpResponseBadRequest("Really fucked")
