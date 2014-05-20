@@ -4,9 +4,14 @@
 {% endblock %}
 {% block js %}
 <script type="text/javascript" src="{{STATIC_URL}}js/index.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.autosize.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(window).bind('load', function(){
         Article.DATA = {{data|safe}};
+        Article.initialize();
+        Range.initialize();
+
+        Session.data = "{% csrf_token %}"
     });
 </script>
 {% endblock %}
@@ -33,19 +38,41 @@
             </p>
             {% endfor %}
         </div>
-        <div id="button-section">
-            <button type="button" class="fc-btn-01">fact-check list</button>
-        </div>
-        <div id="fc-sum-section">
-            <span class="fc-sum-01">4.5</span>
-        </div>
-        <div id="highlight-section">
-            <span class="hl-01"></span>
-        </div>
+        <div id="button-section"></div>
+        <div id="fc-sum-section"></div>
+        <div id="highlight-section"></div>
         <div id="menu-section">
             <div class="menu-button">
                 <button type="button" class="add-question">Add question</button>
-                <button type="button" class="add-factchecker">Add Fact Checker</button>
+                <button type="button" class="add-factcheck">Add Fact Checker</button>
+            </div>
+            <div class="menu-add-factcheck">
+                <div class="fc-score-input">
+                    <h3>신뢰 점수 (0~5)</h3>
+                    <div class="fc-score-input-section">
+                        <button type="button" class="score">0</button>
+                        <button type="button" class="score">1</button>
+                        <button type="button" class="score">2</button>
+                        <button type="button" class="score">3</button>
+                        <button type="button" class="score">4</button>
+                        <button type="button" class="score">5</button>
+                    </div>
+                    <div class="fc-score-criteria">
+                        <span class="low">신뢰성이 낮음(0)</span>
+                        <span class="high">신뢰성이 높음(5)</span>
+                    </div>
+                </div>
+                <div class="fc-ref-input">
+                    <h3>신뢰 근거</h3>
+                    <div class="fc-ref-input-section">
+                        <input type="text" placeholder="관련 링크를 남겨주세요">
+                    </div>
+                </div>
+                <div class="fc-submit">
+                    <button type="button" class="submit">등록하기</button>
+                    <span class="deco">&middot;</span>
+                    <button type="button" class="cancel">취소하기</button>
+                </div>
             </div>
         </div>
         <div id="fc-list-section">
@@ -63,21 +90,14 @@
     </article>
     <aside id="comment-wrapper">
         <ul id="commbtn-section">
-            <li class="test-01">
-                <button type="button">comment button</button>
-                <span class="comm-num">12</span>
+            {% for p in paragraphs %}
+            <li class="comment-summary" id="cmnt-summary-{{p.id}}">
+                <button type="button" id="cmnt-summary-btn{{p.id}}">comment button</button>
+                <span class="comm-num">{{p.num_comments}}</span>
             </li>
-            <li class="test-02">
-                <button type="button">comment button</button>
-                <span class="comm-num">4</span>
-            </li>
-            <li class="test-03">
-                <button type="button">comment button</button>
-                <span class="comm-num">7</span>
-            </li>
+            {% endfor %}
         </ul>
-        <div id="commlist-section">
-        </div>
+        <div id="commlist-section"></div>
     </aside>
 </div>
 {% endblock %}

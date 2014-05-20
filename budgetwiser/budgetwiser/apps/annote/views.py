@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-from budgetwiser.apps.annote.models import Article, Range
+from budgetwiser.apps.annote.models import Article, Range, Paragraph, Comment, Factcheck
 
 def index(request, article_id):
     article = Article.objects.get(id=article_id)
@@ -38,10 +38,11 @@ def index(request, article_id):
 
 def get_range(request):
     try:
-        paragraphs = request.GET.getlist('paragraphs', None)
+        paragraphs = json.loads(request.GET.get('paragraphs', None))
         range_list = []
 
-        for paragraph in paragraphs:
+        for p_id in paragraphs:
+            paragraph = Paragraph.objects.get(id=p_id)
             ranges = paragraph.ranges.all()
             for range in ranges:
                 range_obj = {
@@ -50,6 +51,7 @@ def get_range(request):
                     'start': range.start,
                     'end': range.end,
                     'f_average': range.f_average,
+                    'f_count': range.f_count,
                 }
                 range_list.append(range_obj)
 
@@ -65,8 +67,7 @@ def save_range(request):
         start = request.GET.get('start', None)
         end = request.GET.get('end', None)
         range = Range.objects.filter(parent_elm=parent_elm, start=start, end=end)
-
-        if range.count() == 0:
+        if len(range) == 0:
             paragraph_id = request.GET.get('paragraph_id', None)
             paragraph = Paragraph.objects.get(id=paragraph_id)
 
@@ -89,9 +90,11 @@ def save_range(request):
             return HttpResponse(range_json)
         else:
             range_output = {
-                'id': range.id,
+                'id': range[0].id,
                 'type': 1,
             }
+            range_json = json.dumps(range_output, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
             return HttpResponse(range_json)
     except:
         return HttpResponseBadRequest("Something wrong with 'save_range'")
@@ -116,3 +119,26 @@ def get_factcheck(request):
         return HttpResponse(factcheck_list_json)
     except:
         return HttpResponseBadRequest("Something wrong with 'get_factcheck'")
+
+def save_factcheck(request):
+    try:
+        range_id = request.GET.get('range_id', None)
+        rangeof = Range.objects.get(id=range_id)
+        paragraph = rangeof.paragraph
+        print paragraph.id, rangeof.id
+
+        score = request.GET.get('score', None)
+        ref = request.GET.get('ref', None)
+        print score, ref
+
+        new_factcheck = Factcheck(
+            score = score,
+            ref = ref,
+            rangeof = rangeof,
+            paragraph = paragraph
+        )
+        new_factcheck.save()
+
+        return HttpResponse("Factcheck saved")
+    except:
+        return HttpResponseBadRequest("Something wrong with 'save_factcheck'")
