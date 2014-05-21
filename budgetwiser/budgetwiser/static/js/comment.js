@@ -123,8 +123,8 @@ Comment.loadAnswerInput = function(user, parent_id) {
                 '<span>'+user+'</span>' +
                 '<div class="cmnt-content">' +
                     '<span class="cmnt-type">A.&nbsp;</span>' +
-                    '<textarea style="border: none; resize: none;" id="cmnt-answer-input-'+parent_id+'">답변을 입력해주세요.</textarea>' +
-                    '<input type="text" style="border: none;" id="cmnt-answer-ref-'+parent_id+'" value="정보의 출처를 입력해주세요.">' +
+                    '<textarea accept-charset="UTF-8" style="border: none; resize: none;" id="cmnt-answer-input-'+parent_id+'">답변을 입력해주세요.</textarea>' +
+                    '<input accept-charset="UTF-8" type="text" style="border: none;" id="cmnt-answer-ref-'+parent_id+'" value="정보의 출처를 입력해주세요.">' +
                     '<button class="cmnt-answer-write" id="cmnt-answer-write-'+parent_id+'">답변 남기기</button>' +
                     '<button class="cmnt-answer-cancel">취소하기</button>' +
                 '<div>' +
@@ -167,9 +167,9 @@ Comment.behaveInput = function(parent_id) {
     var btnWrite = $("#cmnt-answer-write-"+parent_id);
     btnWrite.click(function() {
         data = {
-            content: inputContent.val(),
-            ref: inputRef.val(),
-            parent_id: parent_id,
+            'content': inputContent.val(),
+            'ref': inputRef.val(),
+            'parent_id': parent_id,
         };
         console.log(data);
 
@@ -179,10 +179,11 @@ Comment.behaveInput = function(parent_id) {
             data: data,
             dataType: 'json',
             success: function(resObj) {
-                console.log(resObj);
+                Comment.loadComments(resObj);
             },
             error: function(xhr) {
                 //console.log(xhr.responseText);
+                console.log(data);
                 console.log("error");
             },
         });

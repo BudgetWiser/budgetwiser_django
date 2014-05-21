@@ -161,24 +161,39 @@ def load_comment(request):
 
 
 def write_answer(request):
-    print 'write_answer'
     try:
-        print 'try'
-        '''
-        content = request.POST.get('content', None)
-        ref = request.POST.get('ref', None)
-        question = Comment.objects.get(id=request.POST.get('parent_id', None))
+        content = request.POST['content']
+        ref = request.POST['ref']
+        question = Comment.objects.get(id=request.POST['parent_id'])
         paragraph = question.paragraph
 
+        if not ref.startswith('http://'):
+            ref = "http://www.no_valid_url.com"
+        '''
+        # Code for debuggin
+        content = 'test'
+        ref = 'http://www.naver.com/'
+        question = Comment.objects.get(id=1)
+        paragraph = question.paragraph
+        '''
+
         new_comment = Comment (
+            writer = "test",
             typeof = 1,
             content = content,
             ref = ref,
             paragraph = paragraph,
             question = question,
-            user = request.user
+            user = request.user,
         )
+
         new_comment.save()
+        print new_comment.id
+        print new_comment.user
+        print new_comment.ref
+        print new_comment.num_goods
+        print new_comment.num_bads
+        print new_comment.content
 
         new_obj = {
             'id': new_comment.id,
@@ -186,15 +201,17 @@ def write_answer(request):
             'content': new_comment.content,
             'ref': new_comment.ref,
             'num_goods': new_comment.num_goods,
-            'num_bads': new_commentl.num_bads,
+            'num_bads': new_comment.num_bads,
         }
 
-        new_json = json.dumps(new_obj, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
-        '''
+        print new_obj
+        # new_json = json.dumps(new_obj, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+        print paragraph.id
+        new_json = _load_comment(paragraph.id)
+        print new_json
 
         return HttpResponse(new_json)
     except:
-        print 'except'
         return HttpResponseBadRequest("error in write_answer")
 
 def write_question(request):
