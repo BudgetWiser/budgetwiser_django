@@ -14,8 +14,8 @@
         Article.DATA = {{data|safe}};
         Article.initialize();
         Range.initialize();
-		Comment.initialize();
-		Session.initialize();
+        Comment.initialize();
+        Session.initialize();
 
         Session.data = "{% csrf_token %}"
     });
@@ -80,6 +80,12 @@
                     <button type="button" class="cancel">취소하기</button>
                 </div>
             </div>
+            <div class="menu-add-question">
+                <span>질문을 남겨주세요.</span>
+                <textarea class="q-input"></textarea>
+                <button class="q-submit">확인</button>
+                <button class="q-close">취소</button>
+            </div>
         </div>
         <div id="fc-list-section">
             <div class="fc-list-01">
@@ -96,12 +102,12 @@
     </article>
     <aside id="comment-wrapper">
         <ul id="commbtn-section">
-			{% for p in paragraphs %}
-			<li class="comment-summary" id="cmnt-summary-{{p.id}}">
-				<button type="button" id="cmnt-summary-btn{{p.id}}">comment button</button>
-				<span class="comm-num">{{p.c_count}}</span>
-			</li>
-			{% endfor %}
+            {% for p in paragraphs %}
+            <li class="comment-summary" id="cmnt-summary-{{p.id}}">
+                <button type="button" id="cmnt-summary-btn{{p.id}}">comment button</button>
+                <span class="comm-num">{{p.c_count}}</span>
+            </li>
+            {% endfor %}
         </ul>
         <div id="cmntlist-section"></div>
     </aside>

@@ -124,6 +124,7 @@ def get_factcheck(request):
 def _load_comment(paragraph_id):
     paragraph = Paragraph.objects.get(id=paragraph_id)
     comment_list = []
+    print paragraph.comments.filter(typeof=0)[0].user.username
 
     for comment in paragraph.comments.filter(typeof=0):     # Only select question
         comment_obj = {
@@ -179,9 +180,7 @@ def write_answer(request):
         question = Comment.objects.get(id=1)
         paragraph = question.paragraph
         '''
-
         new_comment = Comment (
-            writer = "test",
             typeof = 1,
             content = content,
             ref = ref,
@@ -191,12 +190,6 @@ def write_answer(request):
         )
 
         new_comment.save()
-        print new_comment.id
-        print new_comment.user
-        print new_comment.ref
-        print new_comment.num_goods
-        print new_comment.num_bads
-        print new_comment.content
 
         new_obj = {
             'id': new_comment.id,
@@ -283,3 +276,24 @@ def get_comment(request):
     except:
         return HttpResponseBadRequest("Something wrong with 'get_comment'")
 
+def save_question(request):
+    try:
+        range_id = request.GET.get('range_id', None)
+        content = request.GET.get('content', None)
+
+        rangeof = Range.objects.get(id=range_id)
+
+        new_comment = Comment (
+            typeof = 0,
+            content = content,
+            paragraph = rangeof.paragraph,
+            user = request.user,
+            rangeof = rangeof,
+            ref = '',
+        )
+
+        new_comment.save()
+
+        return HttpResponse("good")
+    except:
+        return HttpResponseBadRequest("Something wrong with 'save_question'")

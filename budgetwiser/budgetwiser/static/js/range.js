@@ -19,6 +19,11 @@ Range.initialize = function(){
     Range.sec_button = $('#button-section');
     Range.sec_average = $('#fc-sum-section');
 
+    Range.sec_add_q = $('.menu-add-question');
+    Range.sec_add_q_close = $('.menu-add-question>button.q-close');
+    Range.sec_add_q_submit = $('.menu-add-question>button.q-submit');
+    Range.sec_add_q_input = $('.menu-add-question>.q-input');
+
     Range.registerHandlers();
     Range.getRange();
 };
@@ -35,6 +40,7 @@ Range.registerHandlers = function(){
         }
     });
     $(Range.sec_add_f_close).bind('click', function(){Range.close(Range.sec_add_f)});
+    $(Range.sec_add_q_close).bind('click', function(){Range.close(Range.sec_add_q)});
 };
 
 Range.getRange = function(){
@@ -232,9 +238,6 @@ Range.setTempRange = function(range){
     }
 };
 
-Range.addQuestion = function(range){
-};
-
 Range.addFactcheck = function(range){
     $(Range.sec_add_f_submit).unbind('click').html('등록하기').removeAttr('disabled').css({'color': '#08afd8', 'cursor': 'pointer'});
     $(Range.sec_add_f_close).show();
@@ -290,6 +293,7 @@ Range.addFactcheck = function(range){
                         Range.addFactcheck.animateDot(fc_btn);
                         Range.dotAction(fc_btn);
                         Range.close(Range.sec_add_f);
+                        location.reload(true);
                     },
                     error: function(xhr){
                         console.log(xhr.responseText);
@@ -297,7 +301,7 @@ Range.addFactcheck = function(range){
                 });
             });
         }else{
-            console.log("점수가 없거나, 근거가 바른 URL이 아닙니다.");
+            alert("점수가 없거나, 근거가 바른 URL이 아닙니다.");
             $(this).html('등록하기').removeAttr('disabled').css({'color': '#08afd8', 'cursor': 'pointer'});
             $(Range.sec_add_f_close).show();
         }
@@ -402,6 +406,45 @@ Range.addRange = function(range, comp){
         error: function(xhr){
             console.log(xhr.responseText);
         },
+    });
+};
+
+Range.addQuestion = function(range){
+    $(Range.sec_add_q_input).val('');
+
+    var rects = range.getClientRects();
+    var last_rect = rects[rects.length-1];
+    var base_pos = $(Range.wrapper).position();
+    var pos = {
+        'top': last_rect.top - base_pos.top + last_rect.height,
+        'left': last_rect.left - base_pos.left + last_rect.width/2 - 100
+    };
+
+    Range.close(Range.sec_menu);
+    Range.setTempRange(range);
+    $(Range.sec_add_q).css(pos).fadeIn(100);
+    $(Range.sec_add_q_input).focus();
+
+    $(Range.sec_add_q_submit).bind('click', function(){
+        var q_text = $(Range.sec_add_q_input).val();
+        Range.addRange(range, function(range_id, type){
+            $.ajax({
+                type: 'GET',
+                url: '/annote/api/savequestion/',
+                data: {
+                    'content': q_text,
+                    'range_id': range_id
+                },
+                success: function(resObj){
+                    alert(resObj);
+                    Range.close(Range.sec_add_q);
+                    location.reload(true);
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        });
     });
 };
 
