@@ -1,8 +1,94 @@
 url_regexp = /(?:(?:(https?|ftp|telnet):\/\/|[\s\t\r\n\[\]\`\<\>\"\'])((?:[\w$\-_\.+!*\'\(\),]|%[0-9a-f][0-9a-f])*\:(?:[\w$\-_\.+!*\'\(\),;\?&=]|%[0-9a-f][0-9a-f])+\@)?(?:((?:(?:[a-z0-9\-가-힣]+\.)+[a-z0-9\-]{2,})|(?:[\d]{1,3}\.){3}[\d]{1,3})|localhost)(?:\:([0-9]+))?((?:\/(?:[\w$\-_\.+!*\'\(\),;:@&=ㄱ-ㅎㅏ-ㅣ가-힣]|%[0-9a-f][0-9a-f])+)*)(?:\/([^\s\/\?\.:<>|#]*(?:\.[^\s\/\?:<>|#]+)*))?(\/?[\?;](?:[a-z0-9\-]+(?:=[^\s:&<>]*)?\&)*[a-z0-9\-]+(?:=[^\s:&<>]*)?)?(#[\w\-]+)?)/gmi;
 
-Article = {};
+var Article = {};
 
-Range = {};
+Article.initialize = function(){
+    Article.paragraphs = $('.article-paragraph');
+    Article.wrapper = $('#article-wrapper');
+    Article.comm_btn = $('.comment-summary>button');
+    Article.comm_list = $('#commlist-section');
+
+    Article.arrangeCommbtn();
+    Article.registerHandlers();
+};
+
+Article.registerHandlers = function(){
+    $(Article.comm_btn).click(function(){
+        if($(this).hasClass('opened')){
+            $(this).removeClass('opened');
+            $(Article.comm_list).html('');
+        }else{
+            $(this).addClass('opened');
+            var id_num = $(this).attr('id').split("cmnt-summary-btn")[1];
+            Article.getComment(id_num);
+        }
+    });
+};
+
+Article.arrangeCommbtn = function(){
+    for(var i=0; i<Article.paragraphs.length; i++){
+        var id_num = $(Article.paragraphs[i]).attr('id').split("p-")[1];
+        var paragraph = $('#p-' + id_num);
+        var comm_btn = $('#cmnt-summary-' + id_num);
+        var pos = {
+            'top': parseInt($(paragraph).position().top + 40)
+        };
+
+        $(comm_btn).css(pos);
+    }
+};
+
+Article.getComment = function(id_num){
+    $.ajax({
+        type: 'GET',
+        url: '/annote/api/getcomment/',
+        data: {
+            'paragraph_id': id_num,
+        },
+        dataType: 'json',
+        success: function(resObj){
+            Article.makeComment(resObj, id_num);
+        },
+        error: function(xhr){
+            console.log(xhr.responseText);
+        }
+    });
+};
+
+Article.makeComment = function(obj, p_id){
+    var btn = $('#cmnt-summary-' + p_id);
+
+    $(Article.comm_list).html('');
+    $(Article.comm_list).css('margin-top', parseInt($(btn).css('top')) - 8);
+
+    var questions = obj.question_list;
+    var answers = obj.answer_list;
+    console.log(questions, answers);
+
+    for(var i=0; i<questions.length; i++){
+        var new_family = $('<div></div>');
+        var q_obj = questions[i];
+        console.log(q_obj);
+
+        $(new_family).addClass('comm-family').attr('id', 'cf-' + q_obj.id);
+        $(new_family).append(Tag.question_tag(q_obj));
+
+        $(Article.comm_list).append(new_family);
+    }
+    for(var i=0; i<answers.length; i++){
+        console.log("B");
+        var a_obj = answers[i];
+        var cf_elm = $('#cf-' + answers[i].question);
+
+        $(cf_elm).append(Tag.answer_tag(a_obj));
+    }
+    var families = $('.comm-family');
+    $(families).each(function(i, elm){
+    });
+};
+
+
+var Range = {};
 
 Range.initialize = function(){
     Range.wrapper = $('#article-wrapper');
@@ -405,4 +491,82 @@ Range.addRange = function(range, comp){
             console.log(xhr.responseText);
         },
     });
+};
+
+var Session = {};
+
+Session.initialize = function(){
+    $.ajaxSetup({
+        crossDomain: false,
+        beforeSend: function(xhr, settings){
+            if(!Session.csrfSafeMethod(settings.type)){
+                var csrftoken = Session.getCookie('csrftoken');
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            }
+        },
+    });
+};
+
+Session.getCookie = function(name){
+    var cookieValue = null;
+    if(document.cookie && document.cookie != ''){
+        var cookies = document.cookie.split(';');
+        for(var i=0; i<cookies.length; i++){
+            var cookie = $.trim(cookies[i]);
+            if(cookie.substring(0, name.length + 1) == (name + '=')){
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+
+Session.csrfSafeMethod = function(method){
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+};
+
+
+Tag = {};
+
+Tag.question_tag = function(obj){
+    var tag =
+        '<div class="comm-question">' +
+            '<img class="comm-writer-img" src="/media/res/img_user_thumbnail_test01.png">' +
+            '<span class="comm-writer-name">' + obj.writer + '</span>' +
+            '<p class="comm-question-content">' +
+                '<span>Q.</span>' + obj.content +
+            '</p>' +
+            '<div class="comm-question-btn">' +
+                '<button class="good">공감하기</button><span class="num_good"> &middot; 15명</span>' +
+            '</div>' +
+        '</div>';
+
+    return tag;
+};
+
+Tag.answer_tag = function(obj){
+    var tag =
+        '<div class="comm-answer">' +
+            '<img class="comm-writer-img" src="/media/res/img_user_thumbnail_test01.png">' +
+            '<span class="comm-writer-name">' + obj.writer + '</span>' +
+            '<p class="comm-answer-content">' +
+                '<span>Q.</span>' + obj.content +
+            '</p>' +
+            '<a href="'> + obj.ref + '" class="comm-answer-ref">' + obj.ref + '</a>' +
+            '<div class="comm-answer-btn">' +
+                '<button class="good">공감하기</button><span class="num_good"> &middot; 15명</span>' +
+                '<span>&nbsp;/&nbsp;</span>' +
+                '<button class="bad">공감하기</button><span class="num_bad"> &middot; 7명</span>' +
+            '</div>' +
+        '</div>';
+
+    return tag;
+};
+
+Tag.add_answer_tag = function(obj){
+    var tag =
+        '<button class="comm-answer-add-"' + obj.id + '>답변 남기기</button>';
+
+    return tag;
 };

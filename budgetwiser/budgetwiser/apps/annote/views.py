@@ -142,3 +142,40 @@ def save_factcheck(request):
         return HttpResponse("Factcheck saved")
     except:
         return HttpResponseBadRequest("Something wrong with 'save_factcheck'")
+
+def get_comment(request):
+    try:
+        paragraph_id = request.GET.get('paragraph_id', None)
+        paragraph = Paragraph.objects.get(id=paragraph_id)
+
+        comments = paragraph.comments.all()
+
+        comment_list = {
+            'question_list': [],
+            'answer_list': []
+        }
+
+        for comment in comments:
+            comment_obj = {
+                'id': comment.id,
+                'writer': comment.writer,
+                'typeof': comment.typeof,
+                'content': comment.content,
+                'ref': comment.ref,
+                'rangeof': comment.rangeof_id,
+                'question': comment.question_id,
+                'num_goods': comment.num_goods,
+                'num_bads': comment.num_bads,
+            }
+            if(comment.typeof == 0):
+                comment_list['question_list'].append(comment_obj)
+            else:
+                comment_list['answer_list'].append(comment_obj)
+
+
+        comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
+        return HttpResponse(comment_list_json)
+    except:
+        return HttpResponseBadRequest("Something wrong with 'get_comment'")
+

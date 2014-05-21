@@ -7,6 +7,7 @@ class Article(models.Model):
     date = models.DateField()                               # Written date of the article
     s_url = models.URLField()                               # Source URL
     s_name = models.CharField(max_length=20)                # Source Name
+    user = models.ForeignKey(User, related_name="articles", null=True, blank=True)
 
     def __unicode__(self):
         return u'%s' % (self.title)
@@ -31,6 +32,12 @@ class Comment(models.Model):
     rangeof = models.ForeignKey('Range', related_name="comments", null=True, blank=True)
     question = models.ForeignKey('Comment', related_name="answers", null=True, blank=True)
 
+    user = models.ForeignKey(User, related_name="comments", null=True, blank=True)
+    good = models.ManyToManyField(User, related_name="goods", null=True, blank=True)
+    bad = models.ManyToManyField(User, related_name="bads", null=True, blank=True)
+    num_goods = models.IntegerField(default=0)                # Good reaction count
+    num_bads = models.IntegerField(default=0)                 # Bad reaction coutn
+
 class Range(models.Model):
     parent_elm = models.CharField(max_length=100)
     start = models.IntegerField()
@@ -49,6 +56,9 @@ class Factcheck(models.Model):
     ref_score = models.IntegerField(default=0)
     rangeof = models.ForeignKey('Range', related_name="factchecks")
     paragraph = models.ForeignKey('Paragraph', related_name="factchecks")
+
+    user = models.ForeignKey(User, related_name="factchecks", null=True, blank=True)
+    ref_users = models.ManyToManyField(User, null=True, blank=True)
 
 
 # BEFORE AND AFTER, SAVE OR DELETE
