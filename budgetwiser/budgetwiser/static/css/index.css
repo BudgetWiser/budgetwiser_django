@@ -46,7 +46,7 @@
     width:1000px;
     margin:0 auto;
     background:#fff;
-    overflow:hidden;
+    overflow:visible;
 }
 #article-wrapper{
     float:left;
@@ -62,23 +62,23 @@
 #article-section{
     font-size:16px;
     font-weight:400;
-    letter-spacing:1px;
+    letter-spacing:0px;
     word-spacing:1px;
     color:#3a3e3f;
-    line-height:26px;
     margin-top:36px;
     margin-bottom:72px;
     position:relative;
     z-index:10;
 }
 #article-section>p{
-    margin-bottom:24px;
+    margin-bottom:32px;
     position:relative;
+    line-height:24px;
 }
 
 /* ARTICLE FACT CHECK LIST BUTTON */
 
-#button-section>button{
+#button-section>button.fc-btn{
     width:18px;
     height:18px;
     background:url("/media/res/btn_fc_list.png") 0 0 no-repeat;
@@ -96,35 +96,69 @@
 
 /* ARTICLE FACT CHECK SUM SPAN */
 
-#fc-sum-section>span{
-    width:58px;
-    height:30px;
-    padding-left:30px;
-    padding-top:8px;
-    font-size:12px;
-    font-weight:700;
-    color:#303435;
-    background:url("/media/res/bg_fc_sum.png") 0 0 no-repeat;
+#fc-sum-section>div{
+    width:114px;
+    height:26px;
+    background:#fff;
+    border-radius:2px;
+    border:3px solid rgba(0,0,0,0.4);
+    background-clip:padding-box;
+    margin-left:6px;
+    box-sizing:content-box;
 
     position:absolute;
     top:42px;
     left:284px;
     z-index:20;
-    display:none;
+}
+#fc-sum-section>div:after{
+    content:"";
+    display:block;
+    width:9px;
+    height:16px;
+    position:absolute;
+    top:5px;
+    left:-9px;
+    z-index:30;
+    background:url("/media/res/bg_box_left_deco.png") 0 0 no-repeat;
+}
+#fc-sum-section .fc-sum>span{
+    width:108px;
+    height:20px;
+    margin:3px;
+    top:0;
+    left:0;
+    position:absolute;
+}
+#fc-sum-section .fc-sum>span.fc-sum-front{
+    background:url("/media/res/btn_score_average.png") 0 0 no-repeat;
+    z-index:40;
+}
+#fc-sum-section .fc-sum>span.fc-sum-bar{
+    width:106px;
+    height:18px;
+    margin:4px;
+    background:#08afd8;
+    z-index:30;
+    box-sizing:content-box;
+}
+#fc-sum-section .fc-sum>span.fc-sum-back{
+    background:#dce1e2;
+    z-index:20;
 }
 
 /* HIGHLIGHT SECTION */
 
-#highlight-section>span.hl-01{
+#highlight-section .highlight{
     background:rgba(255,202,17,0.2);
     height:19px;
-    width:275px;
-
     position:absolute;
-    top:39px;
-    left:0px;
     z-index:5;
     display:none;
+}
+
+#highlight-section .temp-range{
+    background:rgba(255,202,17,0.5);
 }
 
 /* ARTICLE MENU */
@@ -137,6 +171,8 @@
     display:none;
     position:absolute;
     z-index:20;
+    top:0;
+    left:0;
 }
 #menu-section>div.menu-button button{
     width:36px;
@@ -148,12 +184,121 @@
 #menu-section>div.menu-button button.add-question{
     background:url("/media/res/btn_add_q.png") 0 0 no-repeat;
 }
-#menu-section>div.menu-button button.add-factchecker{
+#menu-section>div.menu-button button.add-factcheck{
     background:url("/media/res/btn_add_c.png") 0 0 no-repeat;
 }
 #menu-section>div.menu-button button:hover{
     background-position:0 -36px;
 }
+
+#menu-section>div.menu-add-factcheck{
+    width:200px;
+    box-sizing:content-box;
+    border:3px solid rgba(0,0,0,0.4);
+    border-radius:2px;
+    background:#fff;
+    position:absolute;
+    z-index:20;
+    margin-top:6px;
+    background-clip:padding-box;
+    display:none;
+}
+#menu-section>div.menu-add-factcheck:after{
+    content:"";
+    display:block;
+    width:16px;
+    height:9px;
+    position:absolute;
+    top:-9px;
+    left:92px;
+    z-index:30;
+    background:url("/media/res/bg_box_top_deco.png") 0 0 no-repeat;
+}
+#menu-section>div.menu-add-factcheck h3{
+    font-size:13px;
+    font-weight:600;
+    color:#636869;
+    margin-bottom:10px;
+}
+#menu-section>div.menu-add-factcheck .fc-score-input{
+    margin:16px 10px;
+    padding-bottom:16px;
+    border-bottom:1px solid #e8e9eb;
+    box-sizing:content-box;
+}
+#menu-section>div.menu-add-factcheck .fc-score-input .fc-score-input-section{
+    padding:0 3px;
+    display:inline-block;
+}
+#menu-section>div.menu-add-factcheck .fc-score-input-section>button.score{
+    width:24px;
+    height:24px;
+    margin-left:6px;
+    background:url("/media/res/btn_score.png") 0 0 no-repeat;
+    float:left;
+    cursor:pointer;
+    text-indent:-9999px;
+}
+#menu-section>div.menu-add-factcheck .fc-score-input-section>button.score:first-child{
+    background:url("/media/res/btn_score_null.png") 0 0 no-repeat;
+    margin-left:0;
+}
+#menu-section>div.menu-add-factcheck .fc-score-input-section>button.score:hover{
+    background-position:0 -24px;
+}
+#menu-section>div.menu-add-factcheck .fc-score-criteria{
+    margin-top:6px;
+    width:100%;
+    display:inline-block;
+}
+#menu-section>div.menu-add-factcheck .fc-score-criteria span{
+    font-size:11px;
+    font-weight:400;
+    color:#a8aeaf;
+    display:inline-block;
+}
+#menu-section>div.menu-add-factcheck .fc-score-criteria span.low{
+    float:left;
+}
+#menu-section>div.menu-add-factcheck .fc-score-criteria span.high{
+    float:right;
+}
+#menu-section>div.menu-add-factcheck .fc-ref-input{
+    margin:0 10px 16px 10px;
+}
+#menu-section>div.menu-add-factcheck .fc-ref-input input{
+    width:100%;
+    font-size:13px;
+    font-weight:400;
+    color:#08afd8;
+    border:none;
+}
+#menu-section>div.menu-add-factcheck .fc-submit{
+    margin:0 10px 14px 10px;
+    display:inline-block;
+}
+#menu-section>div.menu-add-factcheck .fc-submit>*{
+    float:left;
+    font-size:13px;
+}
+#menu-section>div.menu-add-factcheck .fc-submit span{
+    color:#a8aeaf;
+    margin:0 4px;
+}
+#menu-section>div.menu-add-factcheck .fc-submit button{
+    background:none;
+    cursor:pointer;
+}
+#menu-section>div.menu-add-factcheck .fc-submit button.submit{
+    color:#08afd8;
+}
+#menu-section>div.menu-add-factcheck .fc-submit button.cancel{
+    color:#868d8e;
+}
+#menu-section>div.menu-add-factcheck .fc-submit button:hover{
+    text-decoration:underline;
+}
+
 
 /* FACT CHECK LIST */
 
@@ -176,6 +321,9 @@
     text-align:center;
 }
 
+
+
+
 /* ARTICLE Q&A LIST BUTTON */
 
 #commbtn-section{
@@ -188,7 +336,6 @@
     z-index:20;
     left:0;
 }
-/* TODO: make below relative to article */
 #commbtn-section button{
     float:left;
     width:16px;
@@ -198,6 +345,9 @@
     cursor:pointer;
 }
 #commbtn-section button:hover{
+    background-position:0 -16px;
+}
+#commbtn-section button.opened{
     background-position:0 -16px;
 }
 #commbtn-section span.comm-num{

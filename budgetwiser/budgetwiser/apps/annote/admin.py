@@ -10,7 +10,7 @@ class ParagraphAdmin(admin.ModelAdmin):
     ordering = ('id', 'article',)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'writer', 'typeof', 'content',)
+    list_display = ('id', 'user', 'typeof', 'content',)
     ordering = ('id', 'typeof',)
 
 class RangeAdmin(admin.ModelAdmin):

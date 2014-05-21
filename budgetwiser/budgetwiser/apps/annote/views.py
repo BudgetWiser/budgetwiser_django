@@ -22,7 +22,7 @@ def index(request, article_id):
         p_data = {
             'id': paragraph.id,
             'content': paragraph.content,
-            'num_comments': paragraph.comments.all().count(),
+            'c_count': paragraph.comments.all().count(),
         }
         data['paragraphs'].append(p_data)
 
@@ -38,10 +38,11 @@ def index(request, article_id):
 
 def get_range(request):
     try:
-        paragraphs = request.GET.getlist('paragraphs', None)
+        paragraphs = json.loads(request.GET.get('paragraphs', None))
         range_list = []
 
-        for paragraph in paragraphs:
+        for p_id in paragraphs:
+            paragraph = Paragraph.objects.get(id=p_id)
             ranges = paragraph.ranges.all()
             for range in ranges:
                 range_obj = {
@@ -50,6 +51,7 @@ def get_range(request):
                     'start': range.start,
                     'end': range.end,
                     'f_average': range.f_average,
+                    'f_count': range.f_count,
                 }
                 range_list.append(range_obj)
 
@@ -65,8 +67,7 @@ def save_range(request):
         start = request.GET.get('start', None)
         end = request.GET.get('end', None)
         range = Range.objects.filter(parent_elm=parent_elm, start=start, end=end)
-
-        if range.count() == 0:
+        if len(range) == 0:
             paragraph_id = request.GET.get('paragraph_id', None)
             paragraph = Paragraph.objects.get(id=paragraph_id)
 
@@ -75,8 +76,8 @@ def save_range(request):
                 start=start,
                 end=end,
                 paragraph=paragraph,
-                num_factchk=0,
-                avg_factchk=0,
+                f_count=0,
+                f_average=0,
             )
             new_range.save()
 
@@ -89,9 +90,11 @@ def save_range(request):
             return HttpResponse(range_json)
         else:
             range_output = {
-                'id': range.id,
+                'id': range[0].id,
                 'type': 1,
             }
+            range_json = json.dumps(range_output, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
             return HttpResponse(range_json)
     except:
         return HttpResponseBadRequest("Something wrong with 'save_range'")
@@ -220,3 +223,63 @@ def write_question(request):
         return HttpResponse("hahaha")
     except:
         return HttpResponseBadRequest("error in write_question")
+
+def save_factcheck(request):
+    try:
+        range_id = request.GET.get('range_id', None)
+        rangeof = Range.objects.get(id=range_id)
+        paragraph = rangeof.paragraph
+        print paragraph.id, rangeof.id
+
+        score = request.GET.get('score', None)
+        ref = request.GET.get('ref', None)
+        print score, ref
+
+        new_factcheck = Factcheck(
+            score = score,
+            ref = ref,
+            rangeof = rangeof,
+            paragraph = paragraph
+        )
+        new_factcheck.save()
+
+        return HttpResponse("Factcheck saved")
+    except:
+        return HttpResponseBadRequest("Something wrong with 'save_factcheck'")
+
+def get_comment(request):
+    try:
+        paragraph_id = request.GET.get('paragraph_id', None)
+        paragraph = Paragraph.objects.get(id=paragraph_id)
+
+        comments = paragraph.comments.all()
+
+        comment_list = {
+            'question_list': [],
+            'answer_list': []
+        }
+
+        for comment in comments:
+            comment_obj = {
+                'id': comment.id,
+                'writer': comment.writer,
+                'typeof': comment.typeof,
+                'content': comment.content,
+                'ref': comment.ref,
+                'rangeof': comment.rangeof_id,
+                'question': comment.question_id,
+                'num_goods': comment.num_goods,
+                'num_bads': comment.num_bads,
+            }
+            if(comment.typeof == 0):
+                comment_list['question_list'].append(comment_obj)
+            else:
+                comment_list['answer_list'].append(comment_obj)
+
+
+        comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
+        return HttpResponse(comment_list_json)
+    except:
+        return HttpResponseBadRequest("Something wrong with 'get_comment'")
+
