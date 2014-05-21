@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>BudgetWiser</title>
+        <!-- META DATA -->
+        <meta charset="utf-8">
+        <meta name="description" content="Budgetwiser service">
+        <meta name="keywords" content="crowdsourcing, budget, wiser">
+        <meta name="author" content="Jonghyuk Jung, heretor92@gmail.com">
+        <!-- STYLE SHEETS -->
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/base.css">
+        {% block css %}{% endblock %}
+        <!-- SCRIPTS -->
+        <script type="text/javascript" src="{{STATIC_URL}}js/jquery/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}js/jquery/jquery.color-2.1.2.min.js"></script>
+        {% block js %}{% endblock %}
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header-wrapper">
+                <header id="header-section">
+                    <h1 class="header-title">BudgetWiser</h1>
+                    <h2 class="header-subtitle">Annote Project.</h2>
+                    <h3 class="header-user">
+                        <span class="user-name">ryudragon12</span>
+                        <img class="user-image" src="/media/res/img_user_thumbnail_test01.png">
+                    <h3>
+                </header>
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
+
+

@@ -26,7 +26,11 @@ src/*.egg-info
 lib
 lib64
 
+# django testdb
+db.*
+
 # added by shavakan
 *.pyc
+*.swo
 *.swp
 *.json	# only to be used for local tests as of now

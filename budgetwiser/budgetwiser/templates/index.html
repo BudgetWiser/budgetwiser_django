@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/index.css">
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{STATIC_URL}}js/autosize/jquery.autosize.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/session.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/article.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/range.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/comment.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/autosize/jquery.autosize.min.js"></script>
+<script type="text/javascript">
+    $(window).bind('load', function(){
+        Article.DATA = {{data|safe}};
+        Article.initialize();
+        Range.initialize();
+		Comment.initialize();
+		Session.initialize();
+
+        Session.data = "{% csrf_token %}"
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div id="title-wrapper">
+    <div id="title-section">
+        <a href="{{article.s_url}}"class="title-source">
+            {{article.s_name}}
+        </a>
+        <time class="title-date">
+            {{article.date|date:"Y년 n월 j일 l"}}
+        </time>
+        <h4 class="title-name">
+            {{article.title}}
+        </h4>
+    </div>
+</div>
+<div id="content-wrapper">
+    <article id="article-wrapper">
+        <div id="article-section">
+            {% for p in paragraphs %}
+            <p id="p-{{p.id}}" class="article-paragraph">
+                {{p.content}}
+            </p>
+            {% endfor %}
+        </div>
+        <div id="button-section"></div>
+        <div id="fc-sum-section"></div>
+        <div id="highlight-section"></div>
+        <div id="menu-section">
+            <div class="menu-button">
+                <button type="button" class="add-question">Add question</button>
+                <button type="button" class="add-factcheck">Add Fact Checker</button>
+            </div>
+            <div class="menu-add-factcheck">
+                <div class="fc-score-input">
+                    <h3>신뢰 점수 (0~5)</h3>
+                    <div class="fc-score-input-section">
+                        <button type="button" class="score">0</button>
+                        <button type="button" class="score">1</button>
+                        <button type="button" class="score">2</button>
+                        <button type="button" class="score">3</button>
+                        <button type="button" class="score">4</button>
+                        <button type="button" class="score">5</button>
+                    </div>
+                    <div class="fc-score-criteria">
+                        <span class="low">신뢰성이 낮음(0)</span>
+                        <span class="high">신뢰성이 높음(5)</span>
+                    </div>
+                </div>
+                <div class="fc-ref-input">
+                    <h3>신뢰 근거</h3>
+                    <div class="fc-ref-input-section">
+                        <input type="text" placeholder="관련 링크를 남겨주세요">
+                    </div>
+                </div>
+                <div class="fc-submit">
+                    <button type="button" class="submit">등록하기</button>
+                    <span class="deco">&middot;</span>
+                    <button type="button" class="cancel">취소하기</button>
+                </div>
+            </div>
+        </div>
+        <div id="fc-list-section">
+            <div class="fc-list-01">
+                <div class="fc-score">4.5</div>
+                <div class="fc-score-bar">
+                    <span class="ball"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul class="fc-url-list">
+                    <li>asdfasdf</li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    <aside id="comment-wrapper">
+        <ul id="commbtn-section">
+			{% for p in paragraphs %}
+			<li class="comment-summary" id="cmnt-summary-{{p.id}}">
+				<button type="button" id="cmnt-summary-btn{{p.id}}">comment button</button>
+				<span class="comm-num">{{p.c_count}}</span>
+			</li>
+			{% endfor %}
+        </ul>
+        <div id="cmntlist-section"></div>
+    </aside>
+</div>
+{% endblock %}
