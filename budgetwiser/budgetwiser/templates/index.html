@@ -3,12 +3,19 @@
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/index.css">
 {% endblock %}
 {% block js %}
-<script type="text/javascript" src="{{STATIC_URL}}js/index.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/autosize/jquery.autosize.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/session.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/article.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/comment.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+		Session.initialize();
+		Session.input_data = "{% csrf_token %}"
         Article.DATA = {{data|safe}};
-		Article.initialize();
+		$(window).load(function() {
+			Article.initialize();
+		});
+		Comment.initialize();
     });
 </script>
 {% endblock %}
@@ -72,8 +79,7 @@
 			</li>
 			{% endfor %}
         </ul>
-        <div id="cmntlist-section">
-        </div>
+        <div id="cmntlist-section"></div>
     </aside>
 </div>
 {% endblock %}

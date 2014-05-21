@@ -1,5 +1,6 @@
 Article = {};
 Article.DATA = {};
+Article.relation = [];
 
 Article.initialize = function(){
 	Article.fc_btn = $(".fc-btn-01");
@@ -41,17 +42,17 @@ Article.btnCommentList = function() {
 				data: data,
 				dataType: 'json',
 				success: function(resObj) {
-					Article.loadComments(resObj);
+					Article.loadComments(resObj, data['id']);
 				},
 				error: function(xhr) {
-					console.log(xhr.responseTest);
-				}
+					console.log(xhr.responseText);
+				},
 			});
 		});
 	}
 };
 
-Article.loadComments = function(comments_all) {
+Article.loadComments = function(comments_all, parag_id) {
 	$("#cmntlist-section").html("");
 	console.log(comments_all);
 
@@ -102,6 +103,10 @@ Article.loadComments = function(comments_all) {
 		for (var j=0; j<comments_all[i]['answers'].length; j++) {
 			/* Generate answers to question */
 			var child = comments_all[i]['answers'][j];
+			var rel = [];
+			rel.push(child['id']);
+			rel.push(comments_all[i]['id']);
+			Article.relation.push(rel);
 
 			var answer = $("<div class='cmnt-answer'></div>");
 			
@@ -164,10 +169,11 @@ Article.loadComments = function(comments_all) {
 
 			var a_answer_section = $("<div></div>");
 
-			var a_answer = $("<form id='cmnt-answer'></form>");
+			var a_answer_form = $("<form id='cmnt-answer' method='post' action='javascript:;'></form>");
+			var a_csrf = Session.input_data;
 			var a_answer_type = $("<span class='cmnt-type'>A.&nbsp;</span>");
-			var a_answer_content = $("<textarea class='cmnt-content' style='border: none;'>답변을 입력해주세요.</textarea>");
-			a_answer_content.attr("id", "cmnt-answer-content");
+			var a_answer_content = $("<textarea class='cmnt-content' style='border: none;' name='content'>답변을 입력해주세요.</textarea>");
+			a_answer_content.attr("id", "cmnt-answer-content" + child['id']);
 			a_answer_content.attr("class", "textarea-transition");
 			a_answer_content.focus(function() {
 				if ($(this).val() === "답변을 입력해주세요.") {
@@ -182,8 +188,8 @@ Article.loadComments = function(comments_all) {
 			a_answer_content.on('keydown', function() {
 				$(this).autosize();
 			});
-			var a_answer_ref = $("<input type='text' class='cmnt-reference' style='border: none;' value='정보의 출처를 입력해주세요.'>");
-			a_answer_ref.attr("id", "cmnt-answer-ref");
+			var a_answer_ref = $("<input type='text' class='cmnt-reference' style='border: none;' value='정보의 출처를 입력해주세요.' name='ref'>");
+			a_answer_ref.attr("id", "cmnt-answer-ref" + child['id']);
 			a_answer_ref.focus(function() {
 				if ($(this).val() === "정보의 출처를 입력해주세요.") {
 					$(this).val("");
@@ -196,20 +202,46 @@ Article.loadComments = function(comments_all) {
 			});
 			var a_answer_btn_section = $("<div class='cmnt-answer-btn-section'></div>");
 			var a_answer_submit = $("<input type='submit' value='답변 남기기'>");
-			a_answer_submit.attr("id", "cmnt-answer-submit-" + comments_all[i]['id']);
-			a_answer_submit.click(function() {
+			a_answer_form.submit(function() {
+				console.log("submit!");
 
+				var parent_id=0;
+				for (var i=0; i<Article.relation; i++) {
+					if (Article.relation[i][0] == child['id']) {
+						parent_id = Article.relation[i][1];
+					}
+				}
+				data = {
+					content: $("#cmnt-answer-content" + child['id']).val(),
+					ref: $("#cmnt-answer-ref" + child['id']).val(),
+					paragraph_id: parag_id,
+					parent_id: parent_id, 
+				};
+
+				$.ajax({
+					type: 'POST',
+					url: '/annote/writeanswer/',
+					data: data,
+					dataType: 'json',
+					success: function(resObj) {
+						Article.loadComments(resObj, data['id']);
+					},
+					error: function(xhr) {
+						console.log(xhr.responseText);
+					},
+				});
 			});
 			var a_answer_cancel = $("<button id='cmnt-answer-cancel'>취소하기</button>");
 			a_answer_cancel.attr("id", "cmnt-answer-cancel");
 
-			a_answer.append(a_answer_type);
-			a_answer.append(a_answer_content);
-			a_answer.append(a_answer_ref);
+			a_answer_form.append(a_csrf);
+			a_answer_form.append(a_answer_type);
+			a_answer_form.append(a_answer_content);
+			a_answer_form.append(a_answer_ref);
 			a_answer_btn_section.append(a_answer_submit);
 			a_answer_btn_section.append(a_answer_cancel);
-			a_answer.append(a_answer_btn_section);
-			a_answer_section.append(a_answer);
+			a_answer_form.append(a_answer_btn_section);
+			a_answer_section.append(a_answer_form);
 			a_section.append(a_username);
 			a_section.append(a_answer_section);
 			answer.append(a_userimg);
@@ -268,4 +300,39 @@ Article.loadComments = function(comments_all) {
 	question.append(q_section);	
 	family.append(question);
 	$("#cmntlist-section").append(family);
+};
+
+
+
+var Session = {};
+
+Session.initialize = function(){
+    $.ajaxSetup({
+        crossDomain: false,
+        beforeSend: function(xhr, settings){
+            if(!Session.csrfSafeMethod(settings.type)){
+                var csrftoken = Session.getCookie('csrftoken');
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            }
+        },
+    });
+};
+
+Session.getCookie = function(name){
+    var cookieValue = null;
+    if(document.cookie && document.cookie != ''){
+        var cookies = document.cookie.split(';');
+        for(var i=0; i<cookies.length; i++){
+            var cookie = $.trim(cookies[i]);
+            if(cookie.substring(0, name.length + 1) == (name + '=')){
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+
+Session.csrfSafeMethod = function(method){
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 };

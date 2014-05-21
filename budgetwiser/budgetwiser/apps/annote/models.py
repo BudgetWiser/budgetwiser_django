@@ -92,7 +92,7 @@ def decrease_factcheck_count(sender, **kwargs):
     o_average = r_obj.avg_factchk * r_obj.num_factchk
     c_average = (o_average - f_obj.score)/(r_obj.num_factchk - 1)
     r_obj.avg_factchk = c_average
-    r_obj.f_count -= 1
+    r_obj.num_factchk -= 1
     r_obj.save()
 
 post_save.connect(increase_comment_count, sender=Comment)

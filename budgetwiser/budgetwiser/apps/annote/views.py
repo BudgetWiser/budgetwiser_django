@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-from budgetwiser.apps.annote.models import Article, Range, Paragraph, Comment
+from budgetwiser.apps.annote.models import *
 
 def index(request, article_id):
     article = Article.objects.get(id=article_id)
@@ -22,7 +22,7 @@ def index(request, article_id):
         p_data = {
             'id': paragraph.id,
             'content': paragraph.content,
-            'num_comments': paragraph.num_comments,
+            'num_comments': paragraph.comments.all().count(),
         }
         data['paragraphs'].append(p_data)
 
@@ -136,8 +136,7 @@ def _load_comment(paragraph_id):
             child_obj = {
                 'id': child.id,
                 'user': child.user.username,
-                'typeof': child.typeof,
-                'content': comment.content,
+                'content': child.content,
                 'ref': child.ref,
                 'num_goods': child.num_goods,
                 'num_bads': child.num_bads,
@@ -154,7 +153,7 @@ def _load_comment(paragraph_id):
 
 def load_comment(request):
     try:
-        comment_list_json = _load_comment(request.GET.get('id', None))
+        comment_list_json = _load_comment(request.GET.get('paragraph_id', None))
 
         return HttpResponse(comment_list_json)
     except:
@@ -162,35 +161,45 @@ def load_comment(request):
 
 
 def write_answer(request):
+    print 'write_answer'
     try:
-        typeof = 1
+        print 'try'
+        '''
         content = request.POST.get('content', None)
         ref = request.POST.get('ref', None)
-        user = User.objects.filter(id=request.POST.get('user_id', None))
-        paragraph = Paragraph.objects.filter(id=request.POST.get('paragraph_id', None))
-        question = Comment.objects.filter(id=request.POST.get('parent_id', None))
-        rangeof = Range.objects.filter(id=question.rangeof.id)
+        question = Comment.objects.get(id=request.POST.get('parent_id', None))
+        paragraph = question.paragraph
 
         new_comment = Comment (
-            typeof = typeof,
+            typeof = 1,
             content = content,
             ref = ref,
             paragraph = paragraph,
-            rangeof = rangeof,
             question = question,
-            user = user
+            user = request.user
         )
         new_comment.save()
 
-        comment_list_json = _load_comment(request.POST.get('paragraph_id', None))
+        new_obj = {
+            'id': new_comment.id,
+            'user': new_comment.user,
+            'content': new_comment.content,
+            'ref': new_comment.ref,
+            'num_goods': new_comment.num_goods,
+            'num_bads': new_commentl.num_bads,
+        }
 
-        return HttpResponse(comment_list_json)
+        new_json = json.dumps(new_obj, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+        '''
+
+        return HttpResponse(new_json)
     except:
-        return HttpResponseBadRequest("Really fucked")
+        print 'except'
+        return HttpResponseBadRequest("error in write_answer")
 
 def write_question(request):
     try:
     
         return HttpResponse("hahaha")
     except:
-        return HttpResponseBadRequest("Really fucked")
+        return HttpResponseBadRequest("error in write_question")

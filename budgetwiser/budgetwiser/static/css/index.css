@@ -189,9 +189,6 @@
     left:0;
 }
 /* TODO: make below relative to article */
-#commbtn-section>li.comment-summary-1{top:44px;}
-#commbtn-section>li.comment-summary-2{top:95px;}
-#commbtn-section>li.comment-summary-3{top:224px;}
 #commbtn-section button{
     float:left;
     width:16px;
@@ -219,9 +216,6 @@
 .cmnt-family {
     margin-top: 18px;
 }
-.cmnt-family span.user-name {
-    margin-bottom: 2px;
-}
 .cmnt-question {
     margin-bottom: 5px;
 }
@@ -229,6 +223,13 @@
     margin-left: 38px;
     font-size: 14px;
     line-height: 140%;
+}
+.cmnt-question>img {
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin-top: 2px;
+    border-radius: 16px;
 }
 .cmnt-answer {
     margin-left: 36px;
@@ -239,33 +240,57 @@
     font-size: 14px;
     line-height: 140%;
 }
-.cmnt-question .user-image {
-    float: left;
-    width: 32px;
-    height: 32px;
-    margin-top: 2px;
-    border-radius: 16px;
-}
-.cmnt-answer .user-image {
+.cmnt-answer>img {
     float: left;
     width: 28px;
     height: 28px;
     border-radius: 14px;
 }
-.cmnt-response-section {
-    display: inline-block;
+.cmnt-answer-add {
+    margin-left: 36px;
+    background: none;
+    font-size: 12px;
+    color: #00627a;
+    cursor: pointer;
 }
-#cmnt-answer-content {
+.cmnt-section>span {
+    font-weight: bold;
+    font-size: 14px;
+}
+.cmnt-content>span {
+    height: 100%;
+    margin-bottom: 5px;
+}
+.cmnt-content>a {
+    word-break: break-word;
+    width: 100%;
+    margin-bottom: 3px;
+    font-size: 12px;
+    line-height: 120%;
+    color:#a0a8aa;
+}
+.cmnt-content>span.cmnt-type {
+    float: left;
+    color: #ff754e;
+}
+.cmnt-content>label {
+    font-size: 13px;
+}
+.cmnt-content>textarea {
     width: 161px;
+    margin-bottom: 5px;
     font-size: 14px;
     color: #a0a8aa;
     resize: none;
 }
-.cmnt-answer-btn-section {
-    margin-top: 10px;
+.cmnt-content>input {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size 12px;
+    color: #a0a8aa;
 }
-.cmnt-answer-btn-section>input {
-    float: left;
+.cmnt-content>button {
+    display: inline-block;
     border: 0px;
     outline: none;
     background: none;
@@ -274,70 +299,22 @@
     font-size: 12px;
     margin-right: 10px;
 }
-.cmnt-answer-btn-section>button {
-    border: 0px;
-    outline: none;
-    background: none;
-    color: #08afd8;
-    font-size: 12px;
-    cursor: pointer;
-}
-.cmnt-answer-img {
-    float: left;
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-}
-#cmnt-answer-btn {
-    margin-left: 6px;
-    border: 0px;
-    outline: none;
-    background: none;
-    color: #08afd8;
-    cursor: pointer;
-}
-#cmnt-write>input {
-    margin-left: 18px;
-    margin-top: 6px;
-    border: 0px;
-    outline: none;
-    background: none;
-    color: #08afd8;
-    cursor: pointer;
-}
-.cmnt-content {
-    height: 100%;
-    margin-bottom: 5px;
-}
-
-.user-name {
-    font-weight: bold;
-    font-size: 14px;
-}
-.cmnt-type {
-    float: left;
-    color: #ff754e;
+.cmnt-bontent>button.cmnt-write-cancel {
+    display: inline;
 }
 .cmnt-response {
+    display: inline-block;
     word-wrap: break-wrap;
     height: 100%;
     font-size: 12pt;
 }
-.cmnt-reference {
-    word-break: break-word;
-    width: 100%;
-    margin-bottom: 3px;
-    font-size: 12px;
-    line-height: 120%;
-    color:#a0a8aa;
-}
-.cmnt-vote {
+.cmnt-response>span.cmnt-vote {
     float: left;
     margin-right: 3px;
     font-size: 12px;
     color: #00627a;
 }
-.cmnt-numvotes {
+.cmnt-response>span.cmnt-numvotes {
     float: left;
     margin-right: 2px;
     font-size: 12px;
