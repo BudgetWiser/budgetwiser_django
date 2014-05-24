@@ -124,7 +124,6 @@ def get_factcheck(request):
 def _load_comment(paragraph_id):
     paragraph = Paragraph.objects.get(id=paragraph_id)
     comment_list = []
-    print paragraph.comments.filter(typeof=0)[0].user.username
 
     for comment in paragraph.comments.filter(typeof=0):     # Only select question
         comment_obj = {
@@ -133,7 +132,7 @@ def _load_comment(paragraph_id):
             'typeof': comment.typeof,
             'content': comment.content,
             'ref': comment.ref,
-            'num_goods': comment.num_goods,
+            'num_goods': len(comment.good.all()),
         }
         child_list = []
         for child in comment.answers.all():
@@ -142,8 +141,8 @@ def _load_comment(paragraph_id):
                 'user': child.user.username,
                 'content': child.content,
                 'ref': child.ref,
-                'num_goods': child.num_goods,
-                'num_bads': child.num_bads,
+                'num_goods': len(child.good.all()),
+                'num_bads': len(child.bad.all()),
             }
             child_list.append(child_obj)
         comment_obj['answers'] = child_list
@@ -297,3 +296,59 @@ def save_question(request):
         return HttpResponse("good")
     except:
         return HttpResponseBadRequest("Something wrong with 'save_question'")
+'''
+return JSONObject
+{'errno':   0 (if no error)
+            1 (if already voted)
+            2 (if already voted on other side)}
+'''
+def vote_good(request):
+    try:
+        if request.method == 'GET':
+            return HttpResponseBadRequest("Invalid request on vote_good")
+        else:
+            user = User.objects.get(id=request.user.id)
+            comment_id = request.POST['comment_id']
+            comment = Comment.objects.get(id=comment_id)
+
+            if user in comment.good.all():
+                res_obj = json.dumps({'errno': 1}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+                return HttpResponse(res_obj)
+            elif user in comment.bad.all():
+                res_obj = json.dumps({'errno': 2}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+                return HttpResponse(res_obj)
+
+            comment.good.add(user)
+            res_obj = json.dumps({'errno': 0}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+            return HttpResponse(res_obj)
+    except:
+        return HttpResponseBadRequest("Something wrong with 'vote_good'")
+
+'''
+return JSONObject
+{'errno':   0 (if no error)
+            1 (if already voted)
+            3 (if already voted on other side)}
+'''
+
+def vote_bad(request):
+    try:
+        if request.method == 'GET':
+            return HttpResponseBadRequest("Invalid request on vote_bad")
+        else:
+            user = User.objects.get(id=request.user.id)
+            comment_id = request.POST['comment_id']
+            comment = Comment.objects.get(id=comment_id)
+
+            if user in comment.bad.all():
+                res_obj = json.dumps({'errno': 1}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+                return HttpResponse(res_obj)
+            elif user in comment.good.all():
+                res_obj = json.dumps({'errno': 2}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+                return HttpResponse(res_obj)
+
+            comment.bad.add(user)
+            res_obj = json.dumps({'errno': 0}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+            return HttpResponses(res_obj)
+    except:
+        return HttpResponseBadRequest("Something wrong with 'vote_bad'")

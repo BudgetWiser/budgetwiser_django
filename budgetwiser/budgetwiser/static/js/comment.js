@@ -30,8 +30,8 @@ Comment.loadQuestion = function(data) {
                     '<span>'+data['content']+'</span>' +
                     '<a href="'+data['ref']+'">'+data['ref']+'</a>' +
                     '<div class="cmnt-response">' +
-                        '<span class="cmnt-vote">공감하기</span>' +
-                        '<span class="cmnt-numvotes">'+data['num_goods']+'명</span>'+
+                        '<span class="cmnt-vote" id="cmnt-good-'+data['id']+'">공감하기</span>' +
+                        '<span class="cmnt-numvotes" id="cmnt-numgoods-'+data['id']+'">'+data['num_goods']+'명</span>'+
                     '</div>'+
                 '</div>' +
             '</div>' +
@@ -55,6 +55,12 @@ Comment.loadQuestion = function(data) {
     
     Comment.behaveInput(data['id']);
     Comment.generateAnswerInput(data['user'], data['id']);
+
+    /* Register vote handlers */
+    Comment.registerVote(data['id']);
+    for (var i=0; i<clist.length; i++) {
+        Comment.registerVote(clist[i]['id']);
+    }
 };
 
 Comment.loadAnswer = function(data) {
@@ -70,11 +76,11 @@ Comment.loadAnswer = function(data) {
                     '<span>'+data['content']+'</span>' +
                     '<a href="'+data['ref']+'">'+data['ref']+'</a>' +
                     '<div class="cmnt-response">' +
-                        '<span class="cmnt-vote">공감하기</span>' +
-                        '<span class="cmnt-numvotes">'+data['num_goods']+'명</span>' +
+                        '<span class="cmnt-vote" id="cmnt-good-'+data['id']+'">공감하기</span>' +
+                        '<span class="cmnt-numvotes" id="cmnt-numgoods-'+data['id']+'">'+data['num_goods']+'명</span>' +
                         '<span class="cmnt-numvotes">&nbsp;/&nbsp;</span>' +
-                        '<span class="cmnt-vote">이의제기</span>' +
-                        '<span class="cmnt-numvotes">'+data['num_bads']+'명</span>' +
+                        '<span class="cmnt-vote" id="cmnt-bad-'+data['id']+'">이의제기</span>' +
+                        '<span class="cmnt-numvotes" id="cmnt-numbads-'+data['id']+'">'+data['num_bads']+'명</span>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -206,4 +212,68 @@ Comment.generateAnswerInput = function(user, parent_id) {
         });
         Comment.behaveInput(parent_id);
     });
+};
+
+Comment.registerVote = function(comment_id) {
+    var goodBtn = $("#cmnt-good-"+comment_id);
+    var badBtn = $("#cmnt-bad-"+comment_id);
+
+    goodBtn.click(function() {
+        $.ajax({
+            type: 'POST',
+            url: '/annote/api/votegood/',
+            data: {'comment_id': comment_id},
+            dataType: 'json',
+            success: function(resObj) {
+                switch(resObj['errno']) {
+                    case 0:
+                        var numGood = parseInt($("#cmnt-numgoods-"+comment_id).text());
+                        document.getElementById("cmnt-numgoods-"+comment_id).innerHTML = (numGood+1)+"명";
+                        alert("댓글에 공감하였습니다.");
+                        break;
+                    case 1:
+                        alert("이미 공감한 댓글입니다.");
+                        break;
+                    case 2:
+                        alert("이미 이의를 제기한 댓글입니다.");
+                        break;
+                    default:
+                        alert("FATAL_ERROR: COMMENT_VOTE_FOR!");
+                }
+            },
+            error: function(xhr) {
+                console.log("error");
+            },
+        });
+    });
+
+    badBtn.click(function() {
+        $.ajax({
+            type: 'POST',
+            url: '/annote/api/votebad/',
+            data: {'comment_id': comment_id},
+            dataType: 'json',
+            success: function(resObj) {
+                switch(resObj['errno']) {
+                    case 0:
+                        var numBad = parseInt($("#cmnt-numbads-"+comment_id).text());
+                        document.getElementById("cmnt-numbads-"+comment_id).innerHTML = (numBad+1)+"명";
+                        alert("댓글에 이의를 제기하였습니다.");
+                        break;
+                    case 1:
+                        alert("이미 이의를 제기한 댓글입니다.");
+                        break;
+                    case 2:
+                        alert("이미 공감한 댓글입니다.");
+                        break;
+                    default:
+                        alert("FATAL_ERROR: COMMENT_VOTE_AGAINST!");
+                }
+            },
+            error: function(xhr) {
+                console.log("error");
+            },
+        });
+    });
+
 };
