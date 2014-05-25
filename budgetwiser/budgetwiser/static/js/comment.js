@@ -1,3 +1,7 @@
+url_regexp = /(?:(?:(https?|ftp|telnet):\/\/|[\s\t\r\n\[\]\`\<\>\"\'])((?:[\w$\-_\.+!*\'\(\),]|%[0-9a-f][0-9a-f])*\:(?:[\w$\-_\.+!*\'\(\),;\?&=]|%[0-9a-f][0-9a-f])+\@)?(?:((?:(?:[a-z0-9\-가-힣]+\.)+[a-z0-9\-]{2,})|(?:[\d]{1,3}\.){3}[\d]{1,3})|localhost)(?:\:([0-9]+))?((?:\/(?:[\w$\-_\.+!*\'\(\),;:@&=ㄱ-ㅎㅏ-ㅣ가-힣]|%[0-9a-f][0-9a-f])+)*)(?:\/([^\s\/\?\.:<>|#]*(?:\.[^\s\/\?:<>|#]+)*))?(\/?[\?;](?:[a-z0-9\-]+(?:=[^\s:&<>]*)?\&)*[a-z0-9\-]+(?:=[^\s:&<>]*)?)?(#[\w\-]+)?)/gmi;
+
+
+
 Comment = {};
 
 Comment.initialize = function(paragraph_id) {
@@ -28,7 +32,7 @@ Comment.loadQuestion = function(data) {
                 '<div class="cmnt-content">' +
                     '<span class="cmnt-type">Q.&nbsp;</span>' +
                     '<span>'+data['content']+'</span>' +
-                    '<a href="'+data['ref']+'">'+data['ref']+'</a>' +
+                    '<a href="'+data['ref']+'" target="_blank">'+data['ref']+'</a>' +
                     '<div class="cmnt-response">' +
                         '<span class="cmnt-vote" id="cmnt-good-'+data['id']+'">공감하기</span>' +
                         '<span class="cmnt-numvotes" id="cmnt-numgoods-'+data['id']+'">'+data['num_goods']+'명</span>'+
@@ -74,7 +78,7 @@ Comment.loadAnswer = function(data) {
                 '<div class="cmnt-content">' +
                     '<span class="cmnt-type">A.&nbsp;</span>' +
                     '<span>'+data['content']+'</span>' +
-                    '<a href="'+data['ref']+'">'+data['ref']+'</a>' +
+                    '<a href="'+data['ref']+'" target="_blank">'+data['ref']+'</a>' +
                     '<div class="cmnt-response">' +
                         '<span class="cmnt-vote" id="cmnt-good-'+data['id']+'">공감하기</span>' +
                         '<span class="cmnt-numvotes" id="cmnt-numgoods-'+data['id']+'">'+data['num_goods']+'명</span>' +
@@ -172,27 +176,53 @@ Comment.behaveInput = function(parent_id) {
     /* Submit button */
     var btnWrite = $("#cmnt-answer-write-"+parent_id);
     btnWrite.click(function() {
-        data = {
-            'content': inputContent.val(),
-            'ref': inputRef.val(),
-            'parent_id': parent_id,
-        };
-        console.log(data);
 
-        $.ajax({
-            type: 'POST',
-            url: '/annote/api/writeanswer/',
-            data: data,
-            dataType: 'json',
-            success: function(resObj) {
-                Comment.loadComments(resObj);
-            },
-            error: function(xhr) {
-                //console.log(xhr.responseText);
-                console.log(data);
-                console.log("error");
-            },
-        });
+        if (inputContent.val() === "답변을 입력해주세요.") {
+            alert("답변을 입력해주세요!");
+        }
+        else if (inputRef.val() === "정보의 출처를 입력해주세요.") {
+            data = {
+                'content': inputContent.val(),
+                'ref': null,
+                'parent_id': parent_id,
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/annote/api/writeanswer/',
+                data: data,
+                dataType: 'json',
+                success: function(resObj) {
+                    Comment.loadComments(resObj);
+                },
+                error: function(xhr) {
+                    console.log("error in wrtie (js)");
+                },
+            });
+        }
+        else if (url_regexp.test(inputRef.val())) {
+            data = {
+                'content': inputContent.val(),
+                'ref': inputRef.val(),
+                'parent_id': parent_id,
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/annote/api/writeanswer/',
+                data: data,
+                dataType: 'json',
+                success: function(resObj) {
+                    Comment.loadComments(resObj);
+                },
+                error: function(xhr) {
+                    console.log("error in wrtie (js)");
+                },
+            });
+        }
+        else {
+            alert("올바른 URL이 아닙니다!");
+        }
     });
 
 };

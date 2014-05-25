@@ -171,7 +171,7 @@ def write_answer(request):
         paragraph = question.paragraph
 
         if not ref.startswith('http://'):
-            ref = "http://www.no_valid_url.com"
+            ref = ''
         '''
         # Code for debuggin
         content = 'test'
@@ -199,9 +199,6 @@ def write_answer(request):
             'num_bads': new_comment.num_bads,
         }
 
-        print new_obj
-        # new_json = json.dumps(new_obj, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
-        print paragraph.id
         new_json = _load_comment(paragraph.id)
         print new_json
 
