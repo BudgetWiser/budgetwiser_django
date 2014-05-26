@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 
 urlpatterns = patterns('',
     url(r'^$', lambda request: HttpResponseRedirect('view/1')),
+    url(r'^list/$', 'budgetwiser.apps.annote.views.list'),
     url(r'^view/(\d+)/$', 'budgetwiser.apps.annote.views.index'),
     url(r'^api/loadcomments/$', 'budgetwiser.apps.annote.views.load_comment'),
     url(r'^api/writeanswer/$', 'budgetwiser.apps.annote.views.write_answer'),

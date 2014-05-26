@@ -6,6 +6,25 @@ import json
 
 from budgetwiser.apps.annote.models import *
 
+def list(request):
+    articles = Article.objects.all()
+    data = []
+    for article in articles:
+        item = {
+            'id': article.id,
+            'title': article.title,
+            'date': article.date,
+        }
+        data.append(item)
+
+    data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
+    response_ctx = {
+        'articles': data_json,
+    }
+
+    return render_to_response('list.html', response_ctx, context_instance=RequestContext(request))
+
 def index(request, article_id):
     article = Article.objects.get(id=article_id)
     paragraphs = article.paragraphs.all()

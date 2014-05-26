@@ -19,8 +19,6 @@ Comment.loadComments = function(data) {
 };
 
 Comment.loadQuestion = function(data) {
-    console.log("loadQuestion" + data['id']);
-
     var family = $('<div></div>');
     family.addClass('cmnt-family');
 
@@ -68,8 +66,6 @@ Comment.loadQuestion = function(data) {
 };
 
 Comment.loadAnswer = function(data) {
-    console.log("loadAnswer" + data['id']);
-
     var tagAnswer = 
         '<div class="cmnt-answer">' +
             '<img src="/media/res/img_user_thumbnail_test01.png">' +
@@ -94,8 +90,6 @@ Comment.loadAnswer = function(data) {
 };
 
 Comment.loadQuestionInput = function(data) {
-    console.log("loadQuestionInput");
-    
 	var tagQuestionInput =
 		'<div class="cmnt-family">' + 
 			'<div class="cmnt-question">' + 
@@ -114,17 +108,13 @@ Comment.loadQuestionInput = function(data) {
 };
 
 Comment.loadAnswerButton = function(parent_id) {
-    console.log("loadAnswerButton "+parent_id);
-
     var tagAnswerButton =
         '<label class="cmnt-answer-add" id="cmnt-answer-add-'+parent_id+'" style="color: #08afd8;">답변 남기기</button>';
-    console.log(tagAnswerButton);
 
     return tagAnswerButton;
 };
 
 Comment.loadAnswerInput = function(user, parent_id) {
-    console.log("loadAnswerInput");    
 
     var tagAnswerInput = 
         '<div class="cmnt-answer">' +
@@ -231,7 +221,6 @@ Comment.generateAnswerInput = function(user, parent_id) {
     /* Write answer button */
     var btnShow = $("#cmnt-answer-add-"+parent_id);
     btnShow.click(function() {
-        console.log("change!");
         $(this).off('click');
         $(this).html("");
         $(this).append(Comment.loadAnswerInput(user, parent_id));
