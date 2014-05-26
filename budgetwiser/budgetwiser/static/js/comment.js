@@ -40,6 +40,18 @@ Comment.loadQuestion = function(data) {
         '</div>';
 
     family.append(tagQuestion);
+    
+    var range = $(".r-"+data.range);
+    $(family).unbind();
+    $(family).bind('mouseover', function() {
+        $(range).fadeIn(100);    
+    });
+    $(family).bind('mouseout', function() {
+        $(range).stop();
+        $(range).fadeOut(100, function() {
+            $(this).hide()
+        });
+    });
 
     /* Add answers */
     var clist = data['answers'];

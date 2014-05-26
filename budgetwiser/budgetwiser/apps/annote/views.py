@@ -149,6 +149,7 @@ def _load_comment(paragraph_id):
             'id': comment.id,
             'user': comment.user.username,
             'typeof': comment.typeof,
+            'range': comment.rangeof.id,
             'content': comment.content,
             'ref': comment.ref,
             'num_goods': len(comment.good.all()),
@@ -181,7 +182,6 @@ def load_comment(request):
     except:
         return HttpResponseBadRequest("Error in load_comment()")
 
-
 def write_answer(request):
     try:
         content = request.POST['content']
@@ -191,18 +191,13 @@ def write_answer(request):
 
         if not ref.startswith('http://'):
             ref = ''
-        '''
-        # Code for debuggin
-        content = 'test'
-        ref = 'http://www.naver.com/'
-        question = Comment.objects.get(id=1)
-        paragraph = question.paragraph
-        '''
+
         new_comment = Comment (
             typeof = 1,
             content = content,
             ref = ref,
             paragraph = paragraph,
+            rangeof = question.rangeof,
             question = question,
             user = request.user,
         )
