@@ -70,7 +70,8 @@ def increase_comment_count(sender, **kwargs):
     c_obj = kwargs['instance']
     p_obj = c_obj.paragraph
     # p_obj.num_comments += 1
-    p_obj.c_count += 1
+    # p_obj.c_count += 1
+    p_obj.c_count = p_obj.comments.count()
     p_obj.save()
 
 def decrease_comment_count(sender, **kwargs):

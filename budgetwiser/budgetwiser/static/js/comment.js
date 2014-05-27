@@ -10,15 +10,18 @@ Comment.initialize = function(paragraph_id) {
 };
 
 Comment.loadComments = function(data) {
+    var username = data.session;
+    var cmntdata = data.comments;
+    console.log(username);
 	Comment.cmntlist.html("");
 
-	for (var i=0; i<data.length; i++) {
-		Comment.loadQuestion(data[i]);
+	for (var i=0; i<cmntdata.length; i++) {
+		Comment.loadQuestion(username, cmntdata[i]);
 	}
 	Comment.loadQuestionInput();
 };
 
-Comment.loadQuestion = function(data) {
+Comment.loadQuestion = function(username, data) {
     var family = $('<div></div>');
     family.addClass('cmnt-family');
 
@@ -59,7 +62,7 @@ Comment.loadQuestion = function(data) {
         for (var i=0; i<clist.length; i++) {
             family.append(Comment.loadAnswer(clist[i]));
         }
-        family.append(Comment.loadAnswerInput(data['user'], data['id']));
+        family.append(Comment.loadAnswerInput(username, data['id']));
     }
     else {
         family.append(Comment.loadAnswerButton(data['id']));

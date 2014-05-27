@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/list.css">
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{STATIC_URL}}js/autosize/jquery.autosize.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/list.js"></script>
+<script type="text/javascript">
+    $(window).bind('load', function(){
+        List.DATA = {{articles|safe}};
+        List.initialize();
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div id="content-wrapper">
+    <ul id="list-wrapper">
+        <h3>현재 등록되어 있는 기사들의 목록입니다.</h3>
+        <div id="list-section">
+        </div>
+    </ul>
+</div>
+{% endblock %}
