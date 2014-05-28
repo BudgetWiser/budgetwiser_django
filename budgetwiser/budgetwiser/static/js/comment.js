@@ -23,7 +23,7 @@ Comment.loadQuestion = function(username, data) {
 
     var tagQuestion =
         '<div class="cmnt-question">' +
-            '<img src="/media/res/img_user_thumbnail_test01.png">' +
+            '<img src="/media/res/img_user_q.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+data.user+'</span>' +
                 '<div class="cmnt-content">' +
@@ -78,7 +78,7 @@ Comment.loadQuestion = function(username, data) {
 Comment.loadAnswer = function(data) {
     var tagAnswer = 
         '<div class="cmnt-answer">' +
-            '<img src="/media/res/img_user_thumbnail_test01.png">' +
+            '<img src="/media/res/img_user_r.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+data['user']+'</span>' +
                 '<div class="cmnt-content">' +
@@ -102,7 +102,7 @@ Comment.loadQuestionInput = function(data) {
     var tagQuestionInput =
         '<div class="cmnt-family">' + 
             '<div class="cmnt-question">' + 
-                '<img src="/media/res/img_user_thumbnail_test01.png">' + 
+                '<img src="/media/res/img_user_profile.png">' + 
                 '<div class="cmnt-section">' +
                     '<span>질문 남기기</span>' + 
                     '<div class="cmnt-content">' + 
@@ -126,7 +126,7 @@ Comment.loadAnswerInput = function(user, parent_id) {
 
     var tagAnswerInput = 
         '<div class="cmnt-answer">' +
-            '<img src="/media/res/img_user_thumbnail_test01.png">' +
+            '<img src="/media/res/img_user_r.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+user+'</span>' +
                 '<div class="cmnt-content">' +
@@ -191,7 +191,7 @@ Comment.behaveInput = function(parent_id) {
                 data: data,
                 dataType: 'json',
                 success: function(resObj) {
-                    Comment.loadComments(resObj);
+                    Comment.loadComments(resObj, parent_id);
                 },
                 error: function(xhr) {
                     console.log("error in wrtie (js)");
@@ -211,7 +211,7 @@ Comment.behaveInput = function(parent_id) {
                 data: data,
                 dataType: 'json',
                 success: function(resObj) {
-                    Comment.loadComments(resObj);
+                    Comment.loadComments(resObj, parent_id);
                 },
                 error: function(xhr) {
                     console.log("error in wrtie (js)");
