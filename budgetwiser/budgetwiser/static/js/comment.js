@@ -5,11 +5,11 @@ Comment.initialize = function(paragraph_id) {
     Comment.paragraph_id = paragraph_id;
 };
 
-Comment.loadComments = function(data) {
+Comment.loadComments = function(data, p_id) {
     var username = data.session;
     var cmntdata = data.comments;
-    console.log(username);
     Comment.cmntlist.html("");
+    $(Comment.cmntlist).css({'top':$('#p-'+p_id).position().top + 26});
 
     for (var i=0; i<cmntdata.length; i++) {
         Comment.loadQuestion(username, cmntdata[i]);
@@ -38,7 +38,7 @@ Comment.loadQuestion = function(username, data) {
         '</div>';
 
     family.append(tagQuestion);
-    
+
     var range = $(".r-"+data.range);
     $(family).unbind();
     $(family).bind('mouseover', function() {

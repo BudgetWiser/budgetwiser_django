@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 
 class Article(models.Model):
     title = models.CharField(max_length=200)                # Title of the article
-    date = models.DateTimeField(auto_now=True)          # Written datetime of the article
+    subtitle = models.CharField(max_length=200)             # Subtitle of the article
+    date = models.DateTimeField(auto_now=True)              # Written datetime of the article
     s_url = models.URLField(null=False)                     # Source URL
     s_name = models.CharField(max_length=20)                # Source Name
     user = models.ForeignKey(User, related_name="articles", null=True, blank=True)
@@ -49,6 +50,9 @@ class Range(models.Model):
     # avg_factchk = models.FloatField(default=0)                # Factcheck Average
     f_count = models.IntegerField(default=0)                         # Factcheck Count
     f_average = models.FloatField(default=0)                         # Factcheck Average
+
+    req_users = models.ManyToManyField(User, related_name="req_ranges", null=True, blank=True)
+    r_count = models.IntegerField(default=0)                   # request count
 
     def __unicode__(self):
         return u'%s__%d_%d' % (self.parent_elm, self.start, self.end)
