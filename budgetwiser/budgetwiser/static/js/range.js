@@ -8,6 +8,7 @@ Range.initialize = function(){
     Range.sec_menu = $('.menu-button');
     Range.btn_add_q = $('.menu-button>button.add-question');
     Range.btn_add_f = $('.menu-button>button.add-factcheck');
+    Range.btn_add_r = $('.menu-button>button.add-request');
     Range.sec_add_f = $('.menu-add-factcheck');
     Range.sec_add_f_input = $('.fc-ref-input-section>input');
     Range.sec_add_f_score_btn = $('.fc-score-input-section>button');
@@ -106,8 +107,8 @@ Range.averageView = function(obj_id, obj_avg){
     var avg = $('<div></div>');
     var bar = $('<span></span>');
     var pos = {
-        'top': parseInt($(btn).css('top')) - 7,
-        'left': parseInt($(btn).css('left')) + 20
+        'top': parseInt($(btn).css('top')) - 9,
+        'left': parseInt($(btn).css('left')) + 14
     }
 
     $(avg).addClass('fc-sum').attr('id', 'a-'+obj_id);
@@ -201,6 +202,7 @@ Range.menu = function(st, range){
 
         $(Range.btn_add_q).unbind('click');
         $(Range.btn_add_f).unbind('click');
+        $(Range.btn_add_r).unbind('click');
     }else{
         var rects = range.getClientRects();
         var last_rect = rects[rects.length-1];
@@ -208,12 +210,13 @@ Range.menu = function(st, range){
         var base_pos = $(Range.wrapper).position();
         var menu_pos = {
             'top': last_rect.top - base_pos.top + last_rect.height,
-            'left': last_rect.left - base_pos.left + last_rect.width/2 - 36,
+            'left': last_rect.left - base_pos.left + last_rect.width/2 - 54,
         };
         $(Range.sec_menu).css(menu_pos).fadeIn(100);
 
         $(Range.btn_add_q).bind('click', function(){Range.addQuestion(range)});
         $(Range.btn_add_f).bind('click', function(){Range.addFactcheck(range)});
+        $(Range.btn_add_r).bind('click', function(){Range.addRequest(range)});
     }
 };
 
@@ -236,6 +239,34 @@ Range.setTempRange = function(range){
         $(Range.sec_range).append(temp_rect);
         $(temp_rect).fadeIn(100);
     }
+};
+
+Range.addRequest = function(range){
+    Range.setTempRange(range);
+    Range.addRange(range, function(range_id, type){
+        $.ajax({
+            type: 'GET',
+            url: '/annote/api/requestfactcheck/',
+            data: {
+                'range_id': range_id,
+            },
+            dataType: 'json',
+            success: function(resObj){
+                if(resObj.errno == 0){
+                    r_btn = Range.addFactcheck.newDot(range_id);
+                    $(r_btn).addClass('fc-req');
+                }else{
+                    r_btn = $('#b-'+range_id);
+                }
+                $(fc_btn).fadeIn(100);
+                Range.addFactcheck.animateDot(r_btn);
+                Range.dotAction(r_btn);
+            },
+            error: function(xhr){
+                console.log(xhr.responseText);
+            }
+        });
+    });
 };
 
 Range.addFactcheck = function(range){
@@ -293,7 +324,6 @@ Range.addFactcheck = function(range){
                         Range.addFactcheck.animateDot(fc_btn);
                         Range.dotAction(fc_btn);
                         Range.close(Range.sec_add_f);
-                        location.reload(true);
                     },
                     error: function(xhr){
                         console.log(xhr.responseText);
@@ -345,8 +375,8 @@ Range.addFactcheck.newDot = function(range_id){
     var fc_hl = $('.r-' + range_id);
     fc_hl = fc_hl[fc_hl.length-1];
     var pos = {
-        'top': parseInt($(fc_hl).css('top')) + parseInt($(fc_hl).css('height')) - 9,
-        'left': parseInt($(fc_hl).css('left')) + parseInt($(fc_hl).css('width')) - 9
+        'top': parseInt($(fc_hl).css('top')) + parseInt($(fc_hl).css('height')) - 6,
+        'left': parseInt($(fc_hl).css('left')) + parseInt($(fc_hl).css('width')) - 6
     };
     while(Range.dotPosList.indexOf(pos.left) != -1){
         pos.left = pos.left + 7;

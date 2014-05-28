@@ -79,26 +79,31 @@
 /* ARTICLE FACT CHECK LIST BUTTON */
 
 #button-section>button.fc-btn{
-    width:18px;
-    height:18px;
-    background:url("/media/res/btn_fc_list.png") 0 0 no-repeat;
+    width:12px;
+    height:12px;
     text-indent:-9999px;
     cursor:pointer;
+    border:3px solid rgba(255,186,0,0.5);
+    border-radius:6px;
+    background:transparent;
 
     position:absolute;
     top:48px;
     left:264px;
     z-index:20;
 }
+#button-section>button.fc-btn.fc-req{
+    border:3px solid rgba(255,92,28,0.5);
+}
 #button-section>button:hover{
-    background-position:0 -18px;
+    border:3px solid rgba(8,175,216,0.8);
 }
 
 /* ARTICLE FACT CHECK SUM SPAN */
 
 #fc-sum-section>div{
-    width:114px;
-    height:26px;
+    width:96px;
+    height:24px;
     background:#fff;
     border-radius:2px;
     border:3px solid rgba(0,0,0,0.4);
@@ -109,7 +114,7 @@
     position:absolute;
     top:42px;
     left:284px;
-    z-index:20;
+    z-index:30;
 }
 #fc-sum-section>div:after{
     content:"";
@@ -123,9 +128,9 @@
     background:url("/media/res/bg_box_left_deco.png") 0 0 no-repeat;
 }
 #fc-sum-section .fc-sum>span{
-    width:108px;
-    height:20px;
-    margin:3px;
+    width:88px;
+    height:16px;
+    margin:4px;
     top:0;
     left:0;
     position:absolute;
@@ -135,8 +140,8 @@
     z-index:40;
 }
 #fc-sum-section .fc-sum>span.fc-sum-bar{
-    width:106px;
-    height:18px;
+    width:88px;
+    height:16px;
     margin:4px;
     background:#08afd8;
     z-index:30;
@@ -164,15 +169,27 @@
 /* ARTICLE MENU */
 
 #menu-section>div.menu-button{
-    width:72px;
-    height:42px;
-    padding-top:6px;
-    background:url("/media/res/bg_menu.png") 0 0 no-repeat;
+    height:36px;
     display:none;
     position:absolute;
     z-index:20;
+    margin-top:4px;
     top:0;
     left:0;
+    background:#3a3e3f;
+    border-radius:2px;
+}
+#menu-section>div.menu-button:after{
+    content:"";
+    display:block;
+    width:12px;
+    height:6px;
+    background:url("/media/res/bg_menu.png") 0 0 no-repeat;
+    position:absolute;
+    z-index:25;
+    top:-6px;
+    left:50%;
+    margin-left:-6px;
 }
 #menu-section>div.menu-button button{
     width:36px;
@@ -186,6 +203,9 @@
 }
 #menu-section>div.menu-button button.add-factcheck{
     background:url("/media/res/btn_add_c.png") 0 0 no-repeat;
+}
+#menu-section>div.menu-button button.add-request{
+    background:url("/media/res/btn_add_r.png") 0 0 no-repeat;
 }
 #menu-section>div.menu-button button:hover{
     background-position:0 -36px;
