@@ -355,7 +355,7 @@ def vote_bad(request):
 
             comment.bad.add(user)
             res_obj = json.dumps({'errno': 0}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
-            return HttpResponses(res_obj)
+            return HttpResponse(res_obj)
     except:
         return HttpResponseBadRequest("Something wrong with 'vote_bad'")
 
