@@ -27,6 +27,7 @@ Article.btnCommentList = function() {
         var btnQuery = '#cmnt-summary-btn'+plist[i].id;
 
         $(btnQuery).click(function() {
+			/* Write the following action as function */
             if($(this).hasClass('opened')){
                 Comment.cmntlist.html("");
                 $(this).removeClass('opened');

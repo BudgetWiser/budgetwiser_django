@@ -471,14 +471,41 @@ Range.addQuestion = function(range){
             $.ajax({
                 type: 'GET',
                 url: '/annote/api/savequestion/',
+                dataType: 'json',
                 data: {
                     'content': q_text,
                     'range_id': range_id
                 },
                 success: function(resObj){
-                    alert(resObj);
+                    alert("성공적으로 등록되었습니다");
+                    console.log(resObj);
+                    console.log(resObj.pid);
                     Range.close(Range.sec_add_q);
-                    location.reload(true);
+                    //location.reload(true);
+
+                    /* Please refactor later */
+                    var btnQuery = '#cmnt-summary-btn'+resObj.pid;
+                    $('.opened').removeClass('opened');
+                    $(btnQuery).addClass('opened');
+                    
+                    var data = {'paragraph_id': resObj.pid};
+                    console.log(data);
+                    $.ajax({
+                        type: 'GET',
+                        url: '/annote/api/loadcomments/',
+                        data: data,
+                        dataType: 'json',
+                        success: function(resObj2) {
+                            console.log("댓글 열기")
+                            Comment.loadComments(resObj2, resObj.pid);
+							var cmntNum = $("#cmnt-summary-"+resObj2.p_id+">span");
+							var currnum = cmntNum.html();
+							cmntNum.html(parseInt(currnum)+1);
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText);
+                        }
+                    });
                 },
                 error: function(xhr){
                     console.log(xhr.responseText);
