@@ -10,6 +10,7 @@ Comment.loadComments = function(data, p_id) {
     var username = data.session;
     var cmntdata = data.comments;
     Comment.cmntlist.html("");
+    console.log(p_id);
     $(Comment.cmntlist).css({'top':$('#p-'+p_id).position().top + 26});
 
     for (var i=0; i<cmntdata.length; i++) {
@@ -24,7 +25,7 @@ Comment.loadQuestion = function(username, data) {
 
     var tagQuestion =
         '<div class="cmnt-question">' +
-            '<img src="/media/res/img_user_thumbnail_test01.png">' +
+            '<img src="/media/res/img_user_q.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+data.user+'</span>' +
                 '<div class="cmnt-content">' +
@@ -74,7 +75,7 @@ Comment.loadQuestion = function(username, data) {
 Comment.loadAnswer = function(data) {
     var tagAnswer = 
         '<div class="cmnt-answer">' +
-            '<img src="/media/res/img_user_thumbnail_test01.png">' +
+            '<img src="/media/res/img_user_r.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+data['user']+'</span>' +
                 '<div class="cmnt-content">' +
@@ -98,7 +99,7 @@ Comment.loadQuestionInput = function(data) {
     var tagQuestionInput =
         '<div class="cmnt-family">' + 
             '<div class="cmnt-question">' + 
-                '<img src="/media/res/img_user_thumbnail_test01.png">' + 
+                '<img src="/media/res/img_user_profile.png">' + 
                 '<div class="cmnt-section">' +
                     '<span>질문 남기기</span>' + 
                     '<div class="cmnt-content">' + 
@@ -122,7 +123,7 @@ Comment.loadAnswerInput = function(user, parent_id) {
 
     var tagAnswerInput = 
         '<div class="cmnt-answer">' +
-            '<img src="/media/res/img_user_thumbnail_test01.png">' +
+            '<img src="/media/res/img_user_r.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+user+'</span>' +
                 '<div class="cmnt-content">' +
