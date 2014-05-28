@@ -141,7 +141,7 @@ Comment.loadAnswerInput = function(user, parent_id) {
                     '<textarea accept-charset="UTF-8" style="border: none; resize: none;" id="cmnt-answer-input-'+parent_id+'">답변을 입력해주세요.</textarea>' +
                     '<input accept-charset="UTF-8" type="text" style="border: none;" id="cmnt-answer-ref-'+parent_id+'" value="정보의 출처를 입력해주세요.">' +
                     '<button class="cmnt-answer-write" id="cmnt-answer-write-'+parent_id+'">답변 남기기</button>' +
-                    '<button class="cmnt-answer-cancel">취소하기</button>' +
+                    '<button class="cmnt-answer-cancel" id="cmnt-answer-cancel-'+parent_id+'">취소하기</button>' +
                 '<div>' +
             '</div>' +
         '</div>';
@@ -181,7 +181,6 @@ Comment.behaveInput = function(parent_id) {
     /* Submit button */
     var btnWrite = $("#cmnt-answer-write-"+parent_id);
     btnWrite.click(function() {
-
         if (inputContent.val() === "답변을 입력해주세요.") {
             alert("답변을 입력해주세요!");
         }
@@ -230,6 +229,12 @@ Comment.behaveInput = function(parent_id) {
         }
     });
 
+    var btnCancel= $("#cmnt-answer-cancel-"+parent_id);
+    btnCancel.click(function() {
+        $(inputContent).val("답변을 입력해주세요.");
+        $(inputRef).val("정보의 출처를 입력해주세요.");
+        $(inputContent).autosize();     // Why does this not work??
+    });
 };
 
 Comment.generateAnswerInput = function(user, parent_id) {
