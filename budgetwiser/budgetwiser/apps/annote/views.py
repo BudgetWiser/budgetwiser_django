@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth import login, authenticate
 from django.conf import settings
@@ -57,37 +57,40 @@ def list(request):
     return render_to_response('list.html', response_ctx, context_instance=RequestContext(request))
 
 def index(request, article_id):
-    article = Article.objects.get(id=article_id)
-    paragraphs = article.paragraphs.all()
+    if request.user.is_authenticated():
+        article = Article.objects.get(id=article_id)
+        paragraphs = article.paragraphs.all()
 
-    data = {
-        'id': article.id,
-        'title': article.title,
-        'date': article.date,
-        'url': article.s_url,
-        'press': article.s_name,
-        'paragraphs': [],
-    }
-
-    for paragraph in paragraphs:
-        p_data = {
-            'id': paragraph.id,
-            'content': paragraph.content,
-            'num_comments': paragraph.comments.count(),
+        data = {
+            'id': article.id,
+            'title': article.title,
+            'date': article.date,
+            'url': article.s_url,
+            'press': article.s_name,
+            'paragraphs': [],
         }
-        print paragraph.comments.count()
-        data['paragraphs'].append(p_data)
 
-    data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+        for paragraph in paragraphs:
+            p_data = {
+                'id': paragraph.id,
+                'content': paragraph.content,
+                'num_comments': paragraph.comments.count(),
+            }
+            print paragraph.comments.count()
+            data['paragraphs'].append(p_data)
 
-    response_context = {
-        'article': article,
-        'paragraphs': paragraphs,
-        'data': data_json,
-        'user': request.user,
-    }
+        data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
 
-    return render_to_response('index.html', response_context, context_instance=RequestContext(request))
+        response_context = {
+            'article': article,
+            'paragraphs': paragraphs,
+            'data': data_json,
+            'user': request.user,
+        }
+
+        return render_to_response('index.html', response_context, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/annote/list/')
 
 def get_range(request):
     try:
@@ -390,3 +393,24 @@ def request_factcheck(request):
     except:
         return HttpResponseBadRequest('Factcheck request failed')
 
+def list_factcheck(request):
+    try:
+        if request.method == 'POST':
+            return HttpResponseBadRequest("Invalid request type on request_factcheck")
+        else:
+            range_id = request.GET.get('range_id', None)
+
+            res = []
+            for fc in Range.objects.get(id=range_id).factchecks.all():
+                fc_json = {
+                    'id': fc.id,
+                    'score': fc.score,
+                    'ref': fc.ref,
+                    'ref_score': fc.ref_score,
+                }
+                res.append(fc_json)
+            res_obj = json.dumps(res, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+            return HttpResponse(res_obj)
+
+    except:
+        return HttpResponseBadRequest('Factcheck list failed')
