@@ -105,6 +105,7 @@ def get_range(request):
                     'end': range.end,
                     'f_average': range.f_average,
                     'f_count': range.f_count,
+                    'r_count': range.r_count,
                 }
                 range_list.append(range_obj)
 
@@ -276,7 +277,9 @@ def save_factcheck(request):
         )
         new_factcheck.save()
 
-        return HttpResponse("Factcheck saved")
+        data = {'avg': rangeof.f_average}
+        data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+        return HttpResponse(data_json)
     except:
         return HttpResponseBadRequest("Something wrong with 'save_factcheck'")
 

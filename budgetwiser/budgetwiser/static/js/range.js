@@ -1,4 +1,4 @@
-url_regexp = /(?:(?:(https?|ftp|telnet):\/\/|[\s\t\r\n\[\]\`\<\>\"\'])((?:[\w$\-_\.+!*\'\(\),]|%[0-9a-f][0-9a-f])*\:(?:[\w$\-_\.+!*\'\(\),;\?&=]|%[0-9a-f][0-9a-f])+\@)?(?:((?:(?:[a-z0-9\-가-힣]+\.)+[a-z0-9\-]{2,})|(?:[\d]{1,3}\.){3}[\d]{1,3})|localhost)(?:\:([0-9]+))?((?:\/(?:[\w$\-_\.+!*\'\(\),;:@&=ㄱ-ㅎㅏ-ㅣ가-힣]|%[0-9a-f][0-9a-f])+)*)(?:\/([^\s\/\?\.:<>|#]*(?:\.[^\s\/\?:<>|#]+)*))?(\/?[\?;](?:[a-z0-9\-]+(?:=[^\s:&<>]*)?\&)*[a-z0-9\-]+(?:=[^\s:&<>]*)?)?(#[\w\-]+)?)/gmi;
+var url_regexp = /(?:(?:(https?|ftp|telnet):\/\/|[\s\t\r\n\[\]\`\<\>\"\'])((?:[\w$\-_\.+!*\'\(\),]|%[0-9a-f][0-9a-f])*\:(?:[\w$\-_\.+!*\'\(\),;\?&=]|%[0-9a-f][0-9a-f])+\@)?(?:((?:(?:[a-z0-9\-가-힣]+\.)+[a-z0-9\-]{2,})|(?:[\d]{1,3}\.){3}[\d]{1,3})|localhost)(?:\:([0-9]+))?((?:\/(?:[\w$\-_\.+!*\'\(\),;:@&=ㄱ-ㅎㅏ-ㅣ가-힣]|%[0-9a-f][0-9a-f])+)*)(?:\/([^\s\/\?\.:<>|#]*(?:\.[^\s\/\?:<>|#]+)*))?(\/?[\?;](?:[a-z0-9\-]+(?:=[^\s:&<>]*)?\&)*[a-z0-9\-]+(?:=[^\s:&<>]*)?)?(#[\w\-]+)?)/mi;
 
 var Range = {};
 
@@ -69,7 +69,6 @@ Range.getRange = function(){
 
 Range.drawRange = function(obj){
     var base_pos = $(Range.wrapper).position();
-    console.log(base_pos);
 
     for(var i=0; i<obj.length; i++){
         var container = document.getElementById(obj[i].parent_elm);
@@ -99,6 +98,16 @@ Range.drawRange = function(obj){
             Range.dotAction(d);
             $(d).fadeIn(100);
         }
+
+        // for request button
+
+        if(obj[i].r_count > 0){
+            var d = Range.addFactcheck.newDot(obj[i].id);
+            $(d).addClass('fc-req');
+            Range.dotAction(d);
+            $(d).fadeIn(100);
+        }
+
     }
 };
 
@@ -114,8 +123,8 @@ Range.averageView = function(obj_id, obj_avg){
     $(avg).addClass('fc-sum').attr('id', 'a-'+obj_id);
 
     var c = parseInt(obj_avg);
-    var l =obj_avg % 1;
-    var bar_width = 4*(c-1) + 18*c + 18*l;
+    var l = obj_avg % 1;
+    var bar_width = 2*(c-1) + 16*c + 16*l;
 
     $(bar).css('width', bar_width).addClass('fc-sum-bar');
     $(avg).append($('<span class="fc-sum-front"></span>'))
@@ -258,9 +267,10 @@ Range.addRequest = function(range){
                 }else{
                     r_btn = $('#b-'+range_id);
                 }
-                $(fc_btn).fadeIn(100);
+                $(r_btn).fadeIn(100);
                 Range.addFactcheck.animateDot(r_btn);
                 Range.dotAction(r_btn);
+                Range.close(Range.sec_menu);
             },
             error: function(xhr){
                 console.log(xhr.responseText);
@@ -302,7 +312,6 @@ Range.addFactcheck = function(range){
                 score++;
             }
         }
-
         if(score > -1 && (url_regexp.test(ref))){
             Range.addRange(range, function(range_id, type){
                 $.ajax({
@@ -313,10 +322,12 @@ Range.addFactcheck = function(range){
                         'ref': ref,
                         'range_id': range_id,
                     },
+                    dataType: 'json',
                     success: function(resObj){
                         var fc_btn;
                         if(type == 0){
                             fc_btn = Range.addFactcheck.newDot(range_id);
+                            Range.averageView(range_id, resObj.avg);
                         }else{
                             fc_btn = $('#b-'+range_id);
                         }
@@ -335,7 +346,6 @@ Range.addFactcheck = function(range){
             $(this).html('등록하기').removeAttr('disabled').css({'color': '#08afd8', 'cursor': 'pointer'});
             $(Range.sec_add_f_close).show();
         }
-        console.log(score, ref);
     });
 };
 
