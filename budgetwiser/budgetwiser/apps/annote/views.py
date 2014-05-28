@@ -280,42 +280,6 @@ def save_factcheck(request):
     except:
         return HttpResponseBadRequest("Something wrong with 'save_factcheck'")
 
-def get_comment(request):
-    try:
-        paragraph_id = request.GET.get('paragraph_id', None)
-        paragraph = Paragraph.objects.get(id=paragraph_id)
-
-        comments = paragraph.comments.all()
-
-        comment_list = {
-            'question_list': [],
-            'answer_list': []
-        }
-
-        for comment in comments:
-            comment_obj = {
-                'id': comment.id,
-                'writer': comment.writer,
-                'typeof': comment.typeof,
-                'content': comment.content,
-                'ref': comment.ref,
-                'rangeof': comment.rangeof_id,
-                'question': comment.question_id,
-                'num_goods': comment.num_goods,
-                'num_bads': comment.num_bads,
-            }
-            if(comment.typeof == 0):
-                comment_list['question_list'].append(comment_obj)
-            else:
-                comment_list['answer_list'].append(comment_obj)
-
-
-        comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
-
-        return HttpResponse(comment_list_json)
-    except:
-        return HttpResponseBadRequest("Something wrong with 'get_comment'")
-
 def save_question(request):
     try:
         range_id = request.GET.get('range_id', None)
@@ -337,8 +301,10 @@ def save_question(request):
         return HttpResponse("good")
     except:
         return HttpResponseBadRequest("Something wrong with 'save_question'")
+
+
 '''
-return JSONObject
+@return JSONObject
 {'errno':   0 (if no error)
             1 (if already voted)
             2 (if already voted on other side)}
@@ -393,4 +359,34 @@ def vote_bad(request):
             return HttpResponses(res_obj)
     except:
         return HttpResponseBadRequest("Something wrong with 'vote_bad'")
+
+'''
+return JSONObject
+{'errno':   0 (no error)
+            1 (already requested),
+ 'r_count': number of requests,}
+'''
+
+def request_factcheck(request):
+    try:
+        if request.method == 'POST':
+            return HttpResponseBadRequest("Invalid request type on request_factcheck")
+        else:
+            requser = User.objects.get(id=request.user.id)
+            range_id = request.GET.get('range_id', None)
+            
+            range_obj = Range.objects.get(id=range_id)
+            if requser in range_obj.req_users.all():
+                res_obj = json.dumps({'errno': 1, 'r_count': range_obj.r_count}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+                return HttpResponse(res_obj)
+            else:
+                range_obj.req_users.add(requser)
+                range_obj.r_count += 1
+                range_obj.save()
+
+                res_obj = json.dumps({'errno': 0, 'r_count': range_obj.r_count}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+                return HttpResponse(res_obj)
+
+    except:
+        return HttpResponseBadRequest('Factcheck request failed')
 
