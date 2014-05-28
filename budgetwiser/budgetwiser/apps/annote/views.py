@@ -211,6 +211,7 @@ def _load_comment(paragraph_id, session):
     ctx = {
         'session': session,
         'comments': comment_list,
+        'p_id': paragraph.id,
     }
     print ctx
 
