@@ -272,7 +272,7 @@ Range.addFactcheck = function(range){
             }
         }
 
-        if(score > -1 && url_regexp.test(ref)){
+        if(score > -1 && (url_regexp.test(ref))){
             Range.addRange(range, function(range_id, type){
                 $.ajax({
                     type: 'GET',

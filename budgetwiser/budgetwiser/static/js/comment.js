@@ -1,21 +1,22 @@
-url_regexp = /(?:(?:(https?|ftp|telnet):\/\/|[\s\t\r\n\[\]\`\<\>\"\'])((?:[\w$\-_\.+!*\'\(\),]|%[0-9a-f][0-9a-f])*\:(?:[\w$\-_\.+!*\'\(\),;\?&=]|%[0-9a-f][0-9a-f])+\@)?(?:((?:(?:[a-z0-9\-가-힣]+\.)+[a-z0-9\-]{2,})|(?:[\d]{1,3}\.){3}[\d]{1,3})|localhost)(?:\:([0-9]+))?((?:\/(?:[\w$\-_\.+!*\'\(\),;:@&=ㄱ-ㅎㅏ-ㅣ가-힣]|%[0-9a-f][0-9a-f])+)*)(?:\/([^\s\/\?\.:<>|#]*(?:\.[^\s\/\?:<>|#]+)*))?(\/?[\?;](?:[a-z0-9\-]+(?:=[^\s:&<>]*)?\&)*[a-z0-9\-]+(?:=[^\s:&<>]*)?)?(#[\w\-]+)?)/gmi;
-
-
-
 Comment = {};
 
 Comment.initialize = function(paragraph_id) {
-	Comment.cmntlist = $("#cmntlist-section");
-	Comment.paragraph_id = paragraph_id;
+    Comment.cmntlist = $("#cmntlist-section");
+    Comment.paragraph_id = paragraph_id;
 };
 
-Comment.loadComments = function(data) {
-	Comment.cmntlist.html("");
+Comment.loadComments = function(data, p_id) {
+    Comment.cmntlist.html("");
 
-	for (var i=0; i<data.length; i++) {
-		Comment.loadQuestion(data[i]);
-	}
-	Comment.loadQuestionInput();
+    var this_p = $('#p-'+p_id);
+    Comment.cmntlist.css({
+        'top': $(this_p).position().top + 30,
+    });
+
+    for (var i=0; i<data.length; i++) {
+        Comment.loadQuestion(data[i]);
+    }
+    Comment.loadQuestionInput();
 };
 
 Comment.loadQuestion = function(data) {
@@ -28,10 +29,9 @@ Comment.loadQuestion = function(data) {
         '<div class="cmnt-question">' +
             '<img src="/media/res/img_user_thumbnail_test01.png">' +
             '<div class="cmnt-section">' +
-                '<span>'+data['user']+'</span>' +
+                '<span>'+data.user+'</span>' +
                 '<div class="cmnt-content">' +
-                    '<span class="cmnt-type">Q.&nbsp;</span>' +
-                    '<span>'+data['content']+'</span>' +
+                    '<span><span class="cmnt-type">Q.&nbsp;</span>'+data['content']+'</span>' +
                     '<a href="'+data['ref']+'" target="_blank">'+data['ref']+'</a>' +
                     '<div class="cmnt-response">' +
                         '<span class="cmnt-vote" id="cmnt-good-'+data['id']+'">공감하기</span>' +
@@ -42,6 +42,8 @@ Comment.loadQuestion = function(data) {
         '</div>';
 
     family.append(tagQuestion);
+    $(family).bind('mouseover', function(){
+    });
 
     /* Add answers */
     var clist = data['answers'];
@@ -56,7 +58,7 @@ Comment.loadQuestion = function(data) {
     }
 
     Comment.cmntlist.append(family);
-    
+
     Comment.behaveInput(data['id']);
     Comment.generateAnswerInput(data['user'], data['id']);
 
@@ -70,14 +72,13 @@ Comment.loadQuestion = function(data) {
 Comment.loadAnswer = function(data) {
     console.log("loadAnswer" + data['id']);
 
-    var tagAnswer = 
+    var tagAnswer =
         '<div class="cmnt-answer">' +
             '<img src="/media/res/img_user_thumbnail_test01.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+data['user']+'</span>' +
                 '<div class="cmnt-content">' +
-                    '<span class="cmnt-type">A.&nbsp;</span>' +
-                    '<span>'+data['content']+'</span>' +
+                    '<span><span class="cmnt-type">A.&nbsp;</span>'+data['content']+'</span>' +
                     '<a href="'+data['ref']+'" target="_blank">'+data['ref']+'</a>' +
                     '<div class="cmnt-response">' +
                         '<span class="cmnt-vote" id="cmnt-good-'+data['id']+'">공감하기</span>' +
@@ -89,27 +90,27 @@ Comment.loadAnswer = function(data) {
                 '</div>' +
             '</div>' +
         '</div>';
-    
+
     return tagAnswer;
 };
 
 Comment.loadQuestionInput = function(data) {
     console.log("loadQuestionInput");
     
-	var tagQuestionInput =
-		'<div class="cmnt-family">' + 
-			'<div class="cmnt-question">' + 
-				'<img src="/media/res/img_user_thumbnail_test01.png">' + 
-				'<div class="cmnt-section">' +
-					'<span>질문 남기기</span>' + 
-					'<div class="cmnt-content">' + 
-						'<span class="cmnt-type">Q.&nbsp;</span>' + 
-						'<label>먼저 질문할 부분을 드래깅하세요.</label>' + 
-					'</div>' + 
-				'</div>' + 
-			'</div>' + 
-		'</div>';
-	
+    var tagQuestionInput =
+        '<div class="cmnt-family">' + 
+            '<div class="cmnt-question">' + 
+                '<img src="/media/res/img_user_thumbnail_test01.png">' + 
+                '<div class="cmnt-section">' +
+                    '<span>질문 남기기</span>' + 
+                    '<div class="cmnt-content">' + 
+                        '<span class="cmnt-type">Q.&nbsp;</span>' + 
+                        '<label>먼저 질문할 부분을 드래깅하세요.</label>' + 
+                    '</div>' + 
+                '</div>' + 
+            '</div>' + 
+        '</div>';
+    
     Comment.cmntlist.append(tagQuestionInput);
 };
 
@@ -176,14 +177,14 @@ Comment.behaveInput = function(parent_id) {
     /* Submit button */
     var btnWrite = $("#cmnt-answer-write-"+parent_id);
     btnWrite.click(function() {
-
         if (inputContent.val() === "답변을 입력해주세요.") {
             alert("답변을 입력해주세요!");
         }
         else if (inputRef.val() === "정보의 출처를 입력해주세요.") {
+            console.log(inputRef.val());
             data = {
                 'content': inputContent.val(),
-                'ref': null,
+                'ref': '',
                 'parent_id': parent_id,
             };
 

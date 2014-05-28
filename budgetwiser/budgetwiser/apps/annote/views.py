@@ -170,15 +170,6 @@ def write_answer(request):
         question = Comment.objects.get(id=request.POST['parent_id'])
         paragraph = question.paragraph
 
-        if not ref.startswith('http://'):
-            ref = ''
-        '''
-        # Code for debuggin
-        content = 'test'
-        ref = 'http://www.naver.com/'
-        question = Comment.objects.get(id=1)
-        paragraph = question.paragraph
-        '''
         new_comment = Comment (
             typeof = 1,
             content = content,

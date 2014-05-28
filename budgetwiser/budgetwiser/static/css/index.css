@@ -361,10 +361,13 @@
 
 /* ARTICLE Q&A */
 #cmntlist-section {
+    position:absolute;
+    left:0;
+    top:0;
     margin-left: 44px;
 }
 .cmnt-family {
-    margin-top: 18px;
+    margin-bottom: 18px;
 }
 .cmnt-question {
     margin-bottom: 5px;
@@ -408,7 +411,6 @@
     font-size: 14px;
 }
 .cmnt-content>span {
-    height: 100%;
     margin-bottom: 5px;
 }
 .cmnt-content>a {
@@ -419,9 +421,13 @@
     line-height: 120%;
     color:#a0a8aa;
 }
-.cmnt-content>span.cmnt-type {
+.cmnt-content>a:hover{
+    text-decoration:underline;
+}
+.cmnt-content span.cmnt-type {
     float: left;
     color: #ff754e;
+    display:inline;
 }
 .cmnt-content>label {
     font-size: 13px;
