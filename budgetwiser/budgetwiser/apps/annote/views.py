@@ -2,9 +2,59 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.serializers.json import DjangoJSONEncoder
-import json
+from django.contrib.auth import login, authenticate
+from django.conf import settings
 
 from budgetwiser.apps.annote.models import *
+
+from random import randrange
+import json, os
+
+
+def list(request):
+    if not request.user.is_authenticated():
+        with open(os.path.join(settings.PROJECT_DIR, 'pktlist.json')) as data_file:
+            data = json.load(data_file)
+        rand_id = randrange(len(data))
+        rand_name = data[str(rand_id)]
+        print rand_id, rand_name
+
+        if User.objects.filter(username=rand_name).count():
+            user = authenticate(username=rand_name, password=rand_id)
+            login(request, user)
+        else:
+            user = User.objects.create_user(rand_name, email=None, password=rand_id)
+            user.save()
+            user = authenticate(username=rand_name, password=rand_id)
+            login(request, user)
+
+    articles = Article.objects.all()
+    data = []
+    for article in articles:
+        item = {
+            'id': article.id,
+            'title': article.title,
+            'date': article.date,
+        }
+
+        users = {}
+        cnt_comments = 0
+        for p in article.paragraphs.all():
+            cnt_comments += p.comments.count();
+            for c in p.comments.all():
+                users[c.user] = c.user
+        item['num_comments'] = cnt_comments
+        item['num_users'] = len(users)
+        data.append(item)
+
+    data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+
+    response_ctx = {
+        'user': request.user,
+        'articles': data_json,
+    }
+
+    return render_to_response('list.html', response_ctx, context_instance=RequestContext(request))
 
 def index(request, article_id):
     article = Article.objects.get(id=article_id)
@@ -18,12 +68,14 @@ def index(request, article_id):
         'press': article.s_name,
         'paragraphs': [],
     }
+
     for paragraph in paragraphs:
         p_data = {
             'id': paragraph.id,
             'content': paragraph.content,
-            'c_count': paragraph.comments.all().count(),
+            'num_comments': paragraph.comments.count(),
         }
+        print paragraph.comments.count()
         data['paragraphs'].append(p_data)
 
     data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
@@ -32,6 +84,7 @@ def index(request, article_id):
         'article': article,
         'paragraphs': paragraphs,
         'data': data_json,
+        'user': request.user,
     }
 
     return render_to_response('index.html', response_context, context_instance=RequestContext(request))
@@ -121,7 +174,7 @@ def get_factcheck(request):
         return HttpResponseBadRequest("Something wrong with 'get_factcheck'")
 
 
-def _load_comment(paragraph_id):
+def _load_comment(paragraph_id, session):
     paragraph = Paragraph.objects.get(id=paragraph_id)
     comment_list = []
 
@@ -130,6 +183,7 @@ def _load_comment(paragraph_id):
             'id': comment.id,
             'user': comment.user.username,
             'typeof': comment.typeof,
+            'range': comment.rangeof.id,
             'content': comment.content,
             'ref': comment.ref,
             'num_goods': len(comment.good.all()),
@@ -149,19 +203,25 @@ def _load_comment(paragraph_id):
 
         comment_list.append(comment_obj)
 
-    comment_list_json = json.dumps(comment_list, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
+    print session
+    ctx = {
+        'session': session,
+        'comments': comment_list,
+    }
+    print ctx
+
+    comment_list_json = json.dumps(ctx, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
 
     return comment_list_json
 
 
 def load_comment(request):
     try:
-        comment_list_json = _load_comment(request.GET.get('paragraph_id', None))
+        comment_list_json = _load_comment(request.GET.get('paragraph_id', None), request.user.username)
 
         return HttpResponse(comment_list_json)
     except:
         return HttpResponseBadRequest("Error in load_comment()")
-
 
 def write_answer(request):
     try:
@@ -175,6 +235,7 @@ def write_answer(request):
             content = content,
             ref = ref,
             paragraph = paragraph,
+            rangeof = question.rangeof,
             question = question,
             user = request.user,
         )
@@ -340,3 +401,4 @@ def vote_bad(request):
             return HttpResponses(res_obj)
     except:
         return HttpResponseBadRequest("Something wrong with 'vote_bad'")
+

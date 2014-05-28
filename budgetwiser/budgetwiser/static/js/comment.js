@@ -5,23 +5,19 @@ Comment.initialize = function(paragraph_id) {
     Comment.paragraph_id = paragraph_id;
 };
 
-Comment.loadComments = function(data, p_id) {
+Comment.loadComments = function(data) {
+    var username = data.session;
+    var cmntdata = data.comments;
+    console.log(username);
     Comment.cmntlist.html("");
 
-    var this_p = $('#p-'+p_id);
-    Comment.cmntlist.css({
-        'top': $(this_p).position().top + 30,
-    });
-
-    for (var i=0; i<data.length; i++) {
-        Comment.loadQuestion(data[i]);
+    for (var i=0; i<cmntdata.length; i++) {
+        Comment.loadQuestion(username, cmntdata[i]);
     }
     Comment.loadQuestionInput();
 };
 
-Comment.loadQuestion = function(data) {
-    console.log("loadQuestion" + data['id']);
-
+Comment.loadQuestion = function(username, data) {
     var family = $('<div></div>');
     family.addClass('cmnt-family');
 
@@ -42,7 +38,17 @@ Comment.loadQuestion = function(data) {
         '</div>';
 
     family.append(tagQuestion);
-    $(family).bind('mouseover', function(){
+    
+    var range = $(".r-"+data.range);
+    $(family).unbind();
+    $(family).bind('mouseover', function() {
+        $(range).fadeIn(100);    
+    });
+    $(family).bind('mouseout', function() {
+        $(range).stop();
+        $(range).fadeOut(100, function() {
+            $(this).hide()
+        });
     });
 
     /* Add answers */
@@ -51,7 +57,7 @@ Comment.loadQuestion = function(data) {
         for (var i=0; i<clist.length; i++) {
             family.append(Comment.loadAnswer(clist[i]));
         }
-        family.append(Comment.loadAnswerInput(data['user'], data['id']));
+        family.append(Comment.loadAnswerInput(username, data['id']));
     }
     else {
         family.append(Comment.loadAnswerButton(data['id']));
@@ -70,9 +76,7 @@ Comment.loadQuestion = function(data) {
 };
 
 Comment.loadAnswer = function(data) {
-    console.log("loadAnswer" + data['id']);
-
-    var tagAnswer =
+    var tagAnswer = 
         '<div class="cmnt-answer">' +
             '<img src="/media/res/img_user_thumbnail_test01.png">' +
             '<div class="cmnt-section">' +
@@ -95,8 +99,6 @@ Comment.loadAnswer = function(data) {
 };
 
 Comment.loadQuestionInput = function(data) {
-    console.log("loadQuestionInput");
-    
     var tagQuestionInput =
         '<div class="cmnt-family">' + 
             '<div class="cmnt-question">' + 
@@ -110,22 +112,17 @@ Comment.loadQuestionInput = function(data) {
                 '</div>' + 
             '</div>' + 
         '</div>';
-    
     Comment.cmntlist.append(tagQuestionInput);
 };
 
 Comment.loadAnswerButton = function(parent_id) {
-    console.log("loadAnswerButton "+parent_id);
-
     var tagAnswerButton =
         '<label class="cmnt-answer-add" id="cmnt-answer-add-'+parent_id+'" style="color: #08afd8;">답변 남기기</button>';
-    console.log(tagAnswerButton);
 
     return tagAnswerButton;
 };
 
 Comment.loadAnswerInput = function(user, parent_id) {
-    console.log("loadAnswerInput");    
 
     var tagAnswerInput = 
         '<div class="cmnt-answer">' +
@@ -137,7 +134,7 @@ Comment.loadAnswerInput = function(user, parent_id) {
                     '<textarea accept-charset="UTF-8" style="border: none; resize: none;" id="cmnt-answer-input-'+parent_id+'">답변을 입력해주세요.</textarea>' +
                     '<input accept-charset="UTF-8" type="text" style="border: none;" id="cmnt-answer-ref-'+parent_id+'" value="정보의 출처를 입력해주세요.">' +
                     '<button class="cmnt-answer-write" id="cmnt-answer-write-'+parent_id+'">답변 남기기</button>' +
-                    '<button class="cmnt-answer-cancel">취소하기</button>' +
+                    '<button class="cmnt-answer-cancel" id="cmnt-answer-cancel-'+parent_id+'">취소하기</button>' +
                 '<div>' +
             '</div>' +
         '</div>';
@@ -226,13 +223,18 @@ Comment.behaveInput = function(parent_id) {
         }
     });
 
+    var btnCancel= $("#cmnt-answer-cancel-"+parent_id);
+    btnCancel.click(function() {
+        $(inputContent).val("답변을 입력해주세요.");
+        $(inputRef).val("정보의 출처를 입력해주세요.");
+        $(inputContent).autosize();     // Why does this not work??
+    });
 };
 
 Comment.generateAnswerInput = function(user, parent_id) {
     /* Write answer button */
     var btnShow = $("#cmnt-answer-add-"+parent_id);
     btnShow.click(function() {
-        console.log("change!");
         $(this).off('click');
         $(this).html("");
         $(this).append(Comment.loadAnswerInput(user, parent_id));
