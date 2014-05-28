@@ -2,11 +2,32 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.serializers.json import DjangoJSONEncoder
-import json
+from django.contrib.auth import login, authenticate
+from django.conf import settings
 
 from budgetwiser.apps.annote.models import *
 
+from random import randrange
+import json, os
+
+
 def list(request):
+    if not request.user.is_authenticated():
+        with open(os.path.join(settings.PROJECT_DIR, 'pktlist.json')) as data_file:
+            data = json.load(data_file)
+        rand_id = randrange(len(data))
+        rand_name = data[str(rand_id)]
+        print rand_id, rand_name
+
+        if User.objects.filter(username=rand_name).count():
+            user = authenticate(username=rand_name, password=rand_id)
+            login(request, user)
+        else:
+            user = User.objects.create_user(rand_name, email=None, password=rand_id)
+            user.save()
+            user = authenticate(username=rand_name, password=rand_id)
+            login(request, user)
+
     articles = Article.objects.all()
     data = []
     for article in articles:
