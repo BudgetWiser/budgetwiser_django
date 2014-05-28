@@ -251,19 +251,11 @@ def write_answer(request):
             'num_bads': new_comment.num_bads,
         }
 
-        new_json = _load_comment(paragraph.id)
-        print new_json
+        new_json = _load_comment(paragraph.id, request.user.username)
 
         return HttpResponse(new_json)
     except:
         return HttpResponseBadRequest("error in write_answer")
-
-def write_question(request):
-    try:
-    
-        return HttpResponse("hahaha")
-    except:
-        return HttpResponseBadRequest("error in write_question")
 
 def save_factcheck(request):
     try:

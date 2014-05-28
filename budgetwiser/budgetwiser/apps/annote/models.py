@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Article(models.Model):
     title = models.CharField(max_length=200)                # Title of the article
-    subtitle = models.CharField(max_length=200)             # Subtitle of the article
+    subtitle = models.CharField(max_length=200, null=True, blank=True)             # Subtitle of the article
     date = models.DateTimeField(auto_now=True)              # Written datetime of the article
     s_url = models.URLField(null=False)                     # Source URL
     s_name = models.CharField(max_length=20)                # Source Name
