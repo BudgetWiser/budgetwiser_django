@@ -6,6 +6,7 @@ Comment.initialize = function(paragraph_id) {
 };
 
 Comment.loadComments = function(data, p_id) {
+	console.log(p_id);
     var username = data.session;
     var cmntdata = data.comments;
     Comment.cmntlist.html("");
@@ -54,15 +55,10 @@ Comment.loadQuestion = function(username, data) {
 
     /* Add answers */
     var clist = data['answers'];
-    if (clist.length > 0) {
-        for (var i=0; i<clist.length; i++) {
-            family.append(Comment.loadAnswer(clist[i]));
-        }
-        family.append(Comment.loadAnswerInput(username, data['id']));
-    }
-    else {
-        family.append(Comment.loadAnswerButton(data['id']));
-    }
+	for (var i=0; i<clist.length; i++) {
+		family.append(Comment.loadAnswer(clist[i]));
+	}
+	family.append(Comment.loadAnswerButton(data['id']));
 
     Comment.cmntlist.append(family);
 
@@ -193,6 +189,9 @@ Comment.behaveInput = function(parent_id) {
                 dataType: 'json',
                 success: function(resObj) {
                     Comment.loadComments(resObj, resObj.p_id);
+					var cmntNum = $("#cmnt-summary-"+resObj.p_id+">span");
+					var currnum = cmntNum.html();
+					cmntNum.html(parseInt(currnum)+1);
                 },
                 error: function(xhr) {
                     console.log("error in wrtie (js)");

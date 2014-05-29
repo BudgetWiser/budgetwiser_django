@@ -247,15 +247,6 @@ def write_answer(request):
 
         new_comment.save()
 
-        new_obj = {
-            'id': new_comment.id,
-            'user': new_comment.user,
-            'content': new_comment.content,
-            'ref': new_comment.ref,
-            'num_goods': new_comment.num_goods,
-            'num_bads': new_comment.num_bads,
-        }
-
         new_json = _load_comment(paragraph.id, request.user.username)
 
         return HttpResponse(new_json)
@@ -304,8 +295,9 @@ def save_question(request):
         )
 
         new_comment.save()
+        res_obj = json.dumps({'pid': new_comment.paragraph.id}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
 
-        return HttpResponse("good")
+        return HttpResponse(res_obj)
     except:
         return HttpResponseBadRequest("Something wrong with 'save_question'")
 
@@ -363,7 +355,7 @@ def vote_bad(request):
 
             comment.bad.add(user)
             res_obj = json.dumps({'errno': 0}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
-            return HttpResponses(res_obj)
+            return HttpResponse(res_obj)
     except:
         return HttpResponseBadRequest("Something wrong with 'vote_bad'")
 
