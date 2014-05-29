@@ -52,6 +52,10 @@
                 <button type="button" class="add-factcheck">Add fact checker</button>
                 <button type="button" class="add-request">Add fact check request</button>
             </div>
+            <div class="menu-req-button">
+                <button type="button" class="add-factcheck">Add fact checker</button>
+                <button type="button" class="add-request">Add fact check request</button>
+            </div>
             <div class="menu-add-factcheck">
                 <div class="fc-score-input">
                     <h3>신뢰 점수 (0~5)</h3>
@@ -88,14 +92,21 @@
             </div>
         </div>
         <div id="fc-list-section">
-            <div class="fc-list-01">
-                <div class="fc-score">4.5</div>
-                <div class="fc-score-bar">
-                    <span class="ball"></span>
-                    <span class="bar"></span>
+            <div class="fc-list">
+                <span class="fc-score-title">평균 점수</span>
+                <button class="fc-score-new">내 의견 추가하기</button>
+                <div class="fc-score">
+                    <span class="fc-score-mask"></span>
+                    <span class="fc-score-bar"></span>
+                    <span class="fc-score-bg"></span>
                 </div>
                 <ul class="fc-url-list">
-                    <li>asdfasdf</li>
+                    <li>
+                        <a href="http://naver.com">
+                            <span class="fc-ref-score"></span>
+                            <span class="fc-ref-link"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -395,16 +395,21 @@ def list_factcheck(request):
             return HttpResponseBadRequest("Invalid request type on request_factcheck")
         else:
             range_id = request.GET.get('range_id', None)
+            range_obj = Range.objects.get(id=range_id)
 
-            res = []
-            for fc in Range.objects.get(id=range_id).factchecks.all():
+            res = {
+                'fc_list': [],
+                'fc_avg': range_obj.f_average,
+                'fc_count': range_obj.f_count
+            }
+            for fc in range_obj.factchecks.all():
                 fc_json = {
                     'id': fc.id,
                     'score': fc.score,
                     'ref': fc.ref,
                     'ref_score': fc.ref_score,
                 }
-                res.append(fc_json)
+                res['fc_list'].append(fc_json)
             res_obj = json.dumps(res, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
             return HttpResponse(res_obj)
 
