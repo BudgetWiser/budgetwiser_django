@@ -36,8 +36,18 @@ Range.initialize = function(){
     Range.req_add_f = $('.menu-req-button>button.add-factcheck');
     Range.req_add_r = $('.menu-req-button>button.add-request');
 
+    Range.close_wrapper = $('#close-wrapper');
+
     Range.registerHandlers();
     Range.getRange();
+};
+
+Range.close = function(elm){
+    $(elm).fadeOut(100, function(){
+        $(this).hide();
+    });
+    $(Range.close_wrapper).hide();
+    $('.temp-range').remove();
 };
 
 Range.registerHandlers = function(){
@@ -51,7 +61,6 @@ Range.registerHandlers = function(){
             window.getSelection().removeAllRanges()
         }
     });
-    $(Range.sec_add_q_close).bind('click', function(){Range.close(Range.sec_add_q)});
 };
 
 Range.getRange = function(){
@@ -133,6 +142,13 @@ Range.reqMenu = function(range_id){
         $(req_num).fadeIn(100);
         Range.dotAction(this);
     });
+    $(Range.close_wrapper).unbind().bind('click', function(){
+        Range.close(Range.req_sec);
+        $(req_btn).removeClass('fc-open');
+        $('.r-'+range_id).fadeOut(100, function(){$(this).hide()});
+        Range.dotAction(req_btn);
+    }).show();
+
     var pos = {
         'top': $(req_btn).position().top + 16,
         'left': $(req_btn).position().left - 30
@@ -234,7 +250,7 @@ Range.fcListView = function(range_id){
                 Range.addFactcheck(Range.DATA[range_id], range_id);
             });
             $(Range.btn_fc_score).css({'width': bar_width});
-            $(Range.sec_fc_num).html("= " + resObj.fc_count + "명");
+            $(Range.sec_fc_num).html("" + resObj.fc_count + "개");
             $(Range.sec_fc_list).html("");
 
             for(var i=0; i<resObj.fc_list.length; i++){
@@ -261,6 +277,13 @@ Range.fcListView = function(range_id){
                 Range.dotAction(this);
                 $(this).removeClass('fc-open');
             });
+            $(Range.close_wrapper).unbind().bind('click', function(){
+                Range.close($(Range.sec_fc_list_view));
+                Range.dotAction(fc_dot);
+                $(fc_dot).removeClass('fc-open');
+                $('.r-'+range_id).fadeOut(100, function(){$(this).hide()});
+            }).show();
+
         },
         error: function(xhr){
             console.log(xhr.responseText);
@@ -339,13 +362,6 @@ Range.dotAction = function(elm){
     }
 };
 
-Range.close = function(elm){
-    $(elm).fadeOut(100, function(){
-        $(this).hide();
-    });
-    $('.temp-range').remove();
-};
-
 Range.check = function(){
     try{
         var range = window.getSelection().getRangeAt(0);
@@ -370,6 +386,10 @@ Range.menu = function(st, range){
         $(Range.btn_add_f).unbind('click');
         $(Range.btn_add_r).unbind('click');
     }else{
+        $(Range.btn_add_q).unbind('click');
+        $(Range.btn_add_f).unbind('click');
+        $(Range.btn_add_r).unbind('click');
+
         var rects = range.getClientRects();
         var last_rect = rects[rects.length-1];
 
@@ -435,6 +455,7 @@ Range.addRequest = function(range){
                 Range.addFactcheck.animateDot(r_btn);
                 Range.dotAction(r_btn);
                 Range.close(Range.sec_menu);
+                $(Range.close_wrapper).hide();
             },
             error: function(xhr){
                 console.log(xhr.responseText);
@@ -475,10 +496,17 @@ Range.addFactcheck = function(range, r_id){
             Range.dotAction($('#b-'+r_id));
         }
     });
+    $(Range.close_wrapper).unbind().bind('click', function(){
+        Range.close(Range.sec_add_f);
+        if(r_id){
+            Range.dotAction($('#b-'+r_id));
+        }
+    }).show();
 
     $(Range.sec_add_f_submit).bind('click', function(){
         $(this).html('잠시만 기다리세요.').attr('disabled', 'disabled').css({'color': '#868d8e', 'cursor': 'default'});
         $(Range.sec_add_f_close).hide();
+        $(Range.close_wrapper).hide();
 
         var score_btn = Range.sec_add_f_score_btn;
         var score = -1;
@@ -527,6 +555,7 @@ Range.addFactcheck = function(range, r_id){
             alert("점수가 없거나, 근거가 바른 URL이 아닙니다.");
             $(this).html('등록하기').removeAttr('disabled').css({'color': '#08afd8', 'cursor': 'pointer'});
             $(Range.sec_add_f_close).show();
+            $(Range.close_wrapper).show();
         }
     });
 };
@@ -642,7 +671,10 @@ Range.addQuestion = function(range){
         'left': last_rect.left - base_pos.left + last_rect.width/2 - 100
     };
 
+
     Range.close(Range.sec_menu);
+    $(Range.sec_add_q_close).unbind().bind('click', function(){Range.close(Range.sec_add_q)});
+    $(Range.close_wrapper).unbind().bind('click', function(){Range.close(Range.sec_add_q)}).show();
     Range.setTempRange(range);
     $(Range.sec_add_q).css(pos).fadeIn(100);
     $(Range.sec_add_q_input).focus();
@@ -662,6 +694,7 @@ Range.addQuestion = function(range){
                 success: function(resObj){
                     alert("성공적으로 등록되었습니다");
                     Range.close(Range.sec_add_q);
+                    $(Range.close_wrapper).hide();
                     //location.reload(true);
                     var btnQuery = '#cmnt-summary-btn'+resObj.pid;
                     $('.opened').removeClass('opened');
