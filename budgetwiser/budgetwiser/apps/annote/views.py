@@ -415,3 +415,15 @@ def list_factcheck(request):
 
     except:
         return HttpResponseBadRequest('Factcheck list failed')
+
+def purge(request):
+    obj = request.GET.get('obj', None)
+    if(obj == 'paragraph'):
+        paragraphs = Paragraph.objects.all()
+        for paragraph in paragraphs:
+            paragraph.c_count = paragraph.comments.all().count()
+            paragraph.save()
+
+        return HttpResponse("PURGE PARAGRAPH COMPLETED")
+    else:
+        return HttpResponseBadRequest("FUCK YOU")

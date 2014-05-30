@@ -16,4 +16,6 @@ urlpatterns = patterns('',
     url(r'^api/votebad/$', 'budgetwiser.apps.annote.views.vote_bad'),
     url(r'^api/requestfactcheck/$', 'budgetwiser.apps.annote.views.request_factcheck'),
     url(r'^api/listfactcheck/$', 'budgetwiser.apps.annote.views.list_factcheck'),
+
+    url(r'^api/purge/$', 'budgetwiser.apps.annote.views.purge'),
 )
