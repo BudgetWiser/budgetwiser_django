@@ -476,16 +476,33 @@
 }
 .cmnt-answer>img {
     float: left;
-    width: 28px;
-    height: 28px;
-    border-radius: 14px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
 }
 .cmnt-answer-add {
     margin-left: 36px;
-    background: none;
     font-size: 12px;
-    color: #00627a;
+}
+.cmnt-answer-add>button{
+    height:24px;
+    line-height:24px;
+    font-size: 12px;
+    color: #08afd8;
     cursor: pointer;
+    padding-left:30px;
+    background:url("/media/res/btn_add_answer.png") left 0 no-repeat;
+}
+.cmnt-answer-add>button:hover{
+    text-decoration:underline;
+}
+.cmnt-answer-add.input-open{
+    margin-left:0;
+    color:#000;
+    cursor:default;
+}
+.cmnt-answer-add .cmnt-answer button:hover{
+    text-decoration:underline;
 }
 .cmnt-section>span {
     font-weight: bold;

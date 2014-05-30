@@ -6,7 +6,7 @@ Comment.initialize = function(paragraph_id) {
 };
 
 Comment.loadComments = function(data, p_id) {
-	console.log(p_id);
+    console.log(p_id);
     var username = data.session;
     var cmntdata = data.comments;
     Comment.cmntlist.html("");
@@ -55,14 +55,15 @@ Comment.loadQuestion = function(username, data) {
 
     /* Add answers */
     var clist = data['answers'];
-	for (var i=0; i<clist.length; i++) {
-		family.append(Comment.loadAnswer(clist[i]));
-	}
-	family.append(Comment.loadAnswerButton(data['id']));
+    for (var i=0; i<clist.length; i++) {
+        family.append(Comment.loadAnswer(clist[i]));
+    }
+    family.append(Comment.loadAnswerButton(data['id']));
 
     Comment.cmntlist.append(family);
+    $('#cmnt-answer-add-'+data.id).append(Comment.loadAnswerInput(data.user, data.id));
 
-    Comment.behaveInput(data['id']);
+    //Comment.behaveInput(data['id']);
     Comment.generateAnswerInput(data['user'], data['id']);
 
     /* Register vote handlers */
@@ -114,7 +115,9 @@ Comment.loadQuestionInput = function(data) {
 
 Comment.loadAnswerButton = function(parent_id) {
     var tagAnswerButton =
-        '<label class="cmnt-answer-add" id="cmnt-answer-add-'+parent_id+'" style="color: #08afd8;">답변 남기기</button>';
+        '<label class="cmnt-answer-add" id="cmnt-answer-add-'+parent_id+'" style="color: #08afd8;">' +
+            '<button>답변 남기기</button>' +
+        '</label>';
 
     return tagAnswerButton;
 };
@@ -122,7 +125,7 @@ Comment.loadAnswerButton = function(parent_id) {
 Comment.loadAnswerInput = function(user, parent_id) {
 
     var tagAnswerInput = 
-        '<div class="cmnt-answer">' +
+        '<div class="cmnt-answer" style="display:none;">' +
             '<img src="/media/res/img_user_r.png">' +
             '<div class="cmnt-section">' +
                 '<span>'+user+'</span>' +
@@ -189,9 +192,9 @@ Comment.behaveInput = function(parent_id) {
                 dataType: 'json',
                 success: function(resObj) {
                     Comment.loadComments(resObj, resObj.p_id);
-					var cmntNum = $("#cmnt-summary-"+resObj.p_id+">span");
-					var currnum = cmntNum.html();
-					cmntNum.html(parseInt(currnum)+1);
+                    var cmntNum = $("#cmnt-summary-"+resObj.p_id+">span");
+                    var currnum = cmntNum.html();
+                    cmntNum.html(parseInt(currnum)+1);
                 },
                 error: function(xhr) {
                     console.log("error in wrtie (js)");
@@ -224,25 +227,22 @@ Comment.behaveInput = function(parent_id) {
     });
 
     var btnCancel= $("#cmnt-answer-cancel-"+parent_id);
-    btnCancel.click(function() {
+    btnCancel.unbind().click(function() {
         $(inputContent).val("답변을 입력해주세요.");
         $(inputRef).val("정보의 출처를 입력해주세요.");
-        $(inputContent).autosize();     // Why does this not work??
+        $('#cmnt-answer-add-'+parent_id).removeClass('input-open');
+        $('#cmnt-answer-add-'+parent_id+'>.cmnt-answer').hide();
+        $('#cmnt-answer-add-'+parent_id+'>button').show();
     });
 };
 
 Comment.generateAnswerInput = function(user, parent_id) {
     /* Write answer button */
-    var btnShow = $("#cmnt-answer-add-"+parent_id);
+    var btnShow = $("#cmnt-answer-add-"+parent_id+'>button');
     btnShow.click(function() {
-        $(this).off('click');
-        $(this).html("");
-        $(this).append(Comment.loadAnswerInput(user, parent_id));
-        $(this).css({
-            'margin-left': '0px',
-            'color': '#000000',
-            'cursor': 'default',
-        });
+        $(this).hide();
+        $('#cmnt-answer-add-'+parent_id+'>.cmnt-answer').show();
+        $('#cmnt-answer-add-'+parent_id).addClass('input-open');
         Comment.behaveInput(parent_id);
     });
 };
