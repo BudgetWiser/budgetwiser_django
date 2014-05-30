@@ -106,7 +106,7 @@
 /* ARTICLE FACT CHECK SUM SPAN */
 
 #fc-sum-section>div{
-    width:96px;
+    min-width:96px;
     height:24px;
     background:#fff;
     border-radius:2px;
@@ -114,6 +114,8 @@
     background-clip:padding-box;
     margin-left:6px;
     box-sizing:content-box;
+    font-size:13px;
+    line-height:24px;
 
     position:absolute;
     top:42px;
@@ -130,6 +132,14 @@
     left:-9px;
     z-index:30;
     background:url("/media/res/bg_box_left_deco.png") 0 0 no-repeat;
+}
+#fc-sum-section>div.req-sum{
+    padding:0 4px;
+}
+#fc-sum-section>div.req-sum span{
+    display:inline;
+    color:#08afd8;
+    font-weight:600;
 }
 #fc-sum-section .fc-sum>span{
     width:88px;

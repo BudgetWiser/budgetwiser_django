@@ -34,7 +34,7 @@ Range.initialize = function(){
 
     Range.req_sec = $('.menu-req-button');
     Range.req_add_f = $('.menu-req-button>button.add-factcheck');
-    Range.req_add_r = $('.menu-req-button>button.add-factcheck');
+    Range.req_add_r = $('.menu-req-button>button.add-request');
 
     Range.registerHandlers();
     Range.getRange();
@@ -51,7 +51,6 @@ Range.registerHandlers = function(){
             window.getSelection().removeAllRanges()
         }
     });
-    $(Range.sec_add_f_close).bind('click', function(){Range.close(Range.sec_add_f)});
     $(Range.sec_add_q_close).bind('click', function(){Range.close(Range.sec_add_q)});
 };
 
@@ -115,6 +114,7 @@ Range.drawRange = function(obj){
 
         if(obj[i].r_count > 0 && obj[i].f_count == 0){
             var d = Range.addFactcheck.newDot(obj[i].id);
+            Range.reqnumView(obj[i].id, obj[i].r_count);
             $(d).addClass('fc-req');
             Range.dotAction(d);
             $(d).fadeIn(100);
@@ -125,9 +125,12 @@ Range.drawRange = function(obj){
 
 Range.reqMenu = function(range_id){
     var req_btn = $('#b-'+ range_id);
+    var req_num = $('#rn-'+ range_id);
+    $(req_num).fadeOut(100, function(){$(this).hide()});
     $(req_btn).unbind().addClass('fc-open').bind('click', function(){
         Range.close(Range.req_sec);
         $(this).removeClass('fc-open');
+        $(req_num).fadeIn(100);
         Range.dotAction(this);
     });
     var pos = {
@@ -135,16 +138,60 @@ Range.reqMenu = function(range_id){
         'left': $(req_btn).position().left - 30
     };
     $(Range.req_sec).css(pos).fadeIn(100);
+    $(Range.req_sec).children().unbind();
+
+    $(Range.req_add_f).bind('click', function(){
+        Range.close(Range.req_sec);
+        $(req_btn).removeClass('fc-open');
+        $('.r-'+range_id).stop().fadeOut(100, function(){$(this).hide()});
+        Range.addFactcheck(Range.DATA[range_id], range_id);
+    });
+    $(Range.req_add_r).bind('click', function(){
+        Range.addRequest(Range.DATA[range_id]);
+
+        Range.close(Range.req_sec);
+        $(req_btn).removeClass('fc-open');
+        $(req_num).fadeIn(100);
+        Range.dotAction(req_btn);
+
+        $(req_btn).css('z-index', '20');
+        $('.r-'+range_id).stop().fadeOut(100, function(){$(this).hide()});
+        $(req_num).stop().fadeOut(100, function(){$(this).hide()});
+    });
+};
+
+Range.reqnumView = function(range_id, req_num){
+    var btn = $('#b-' + range_id);
+    if($('#rn-'+range_id).length > 0){
+        $('#rn-'+range_id).remove();
+    }
+    var tag =
+        '<div class="req-sum" id="rn-' + range_id + '">' +
+            '<span>' + req_num + '명</span>이 사실 확인을 요청했습니다.' +
+        '</div>';
+
+    var pos = {
+        'top': parseInt($(btn).css('top')) - 9,
+        'left': parseInt($(btn).css('left')) + 14
+    };
+
+    $(Range.sec_average).append(tag);
+
+    var elm = $('#rn-' + range_id);
+    $(elm).css(pos).hide();
 };
 
 Range.averageView = function(obj_id, obj_avg){
     var btn = $('#b-' + obj_id);
+    if($('#a-'+obj_id).length > 0){
+        $('#a-'+obj_id).remove();
+    }
     var avg = $('<div></div>');
     var bar = $('<span></span>');
     var pos = {
         'top': parseInt($(btn).css('top')) - 9,
         'left': parseInt($(btn).css('left')) + 14
-    }
+    };
 
     $(avg).addClass('fc-sum').attr('id', 'a-'+obj_id);
 
@@ -180,7 +227,12 @@ Range.fcListView = function(range_id){
                 bar_width = c*30 + l*24 - 6;
             }
 
-            $(Range.btn_fc_new).attr('id', 'n-' + range_id);
+            $(Range.btn_fc_new).unbind().bind('click', function(){
+                $(Range.sec_fc_list_view).fadeOut(100, function(){$(this).hide()});
+                $('.r-'+range_id).stop().fadeOut(100, function(){$(this).hide()});
+                $('#b-'+range_id).removeClass('fc-open');
+                Range.addFactcheck(Range.DATA[range_id], range_id);
+            });
             $(Range.btn_fc_score).css({'width': bar_width});
             $(Range.sec_fc_num).html("= " + resObj.fc_count + "명");
             $(Range.sec_fc_list).html("");
@@ -249,14 +301,19 @@ Range.dotAction = function(elm){
     var r_hl = $('.r-'+id_num);
 
     if($(elm).hasClass('fc-req')){
+        var rn_view = $('#rn-'+id_num);
+
         $(elm).bind('mouseover', function(){
             $(this).css('z-index', '100');
+            $(rn_view).fadeIn(100);
             $(r_hl).fadeIn(100);
         });
         $(elm).bind('mouseout', function(){
             $(this).css('z-index', '20');
             $(r_hl).stop();
             $(r_hl).fadeOut(100, function(){$(this).hide()});
+            $(rn_view).stop();
+            $(rn_view).fadeOut(100, function(){$(this).hide()});
         });
         $(elm).bind('click', function(){
             Range.reqMenu(id_num);
@@ -273,6 +330,7 @@ Range.dotAction = function(elm){
             $(this).css('z-index', '20');
             $(r_hl).stop();
             $(r_hl).fadeOut(100, function(){$(this).hide()});
+            $(r_avg).stop();
             $(r_avg).fadeOut(100, function(){$(this).hide()});
         });
         $(elm).bind('click', function(){
@@ -363,7 +421,13 @@ Range.addRequest = function(range){
                 if(type == 0){
                     r_btn = Range.addFactcheck.newDot(range_id);
                     $(r_btn).addClass('fc-req');
+                    Range.reqnumView(range_id, resObj.r_count);
                 }else{
+                    if(resObj.errno == 1){
+                        alert("이미 내가 사실 확인을 요청한 부분입니다.");
+                    }else{
+                        Range.reqnumView(range_id, resObj.r_count);
+                    }
                     r_btn = $('#b-'+range_id);
                 }
                 $(r_btn).fadeIn(100);
@@ -378,7 +442,7 @@ Range.addRequest = function(range){
     });
 };
 
-Range.addFactcheck = function(range){
+Range.addFactcheck = function(range, r_id){
     $(Range.sec_add_f_submit).unbind('click').html('등록하기').removeAttr('disabled').css({'color': '#08afd8', 'cursor': 'pointer'});
     $(Range.sec_add_f_close).show();
     $(Range.sec_add_f_score_btn).unbind('click');
@@ -391,11 +455,25 @@ Range.addFactcheck = function(range){
         'top': last_rect.top - base_pos.top + last_rect.height,
         'left': last_rect.left - base_pos.left + last_rect.width/2 - 100
     };
+    if(r_id){
+        var r_btn = $('#b-'+r_id);
+        pos = {
+            'top': $(r_btn).position().top + 14,
+            'left': $(r_btn).position().left - 100 + 3
+        };
+    }
 
     Range.close(Range.sec_menu);
     Range.setTempRange(range);
     $(Range.sec_add_f).css(pos).fadeIn(100);
     Range.addFactcheck.scoreInput();
+    $(Range.sec_add_f_close).unbind();
+    $(Range.sec_add_f_close).bind('click', function(){
+        Range.close(Range.sec_add_f);
+        if(r_id){
+            Range.dotAction($('#b-'+r_id));
+        }
+    });
 
     $(Range.sec_add_f_submit).bind('click', function(){
         $(this).html('잠시만 기다리세요.').attr('disabled', 'disabled').css({'color': '#868d8e', 'cursor': 'default'});
@@ -424,11 +502,14 @@ Range.addFactcheck = function(range){
                     dataType: 'json',
                     success: function(resObj){
                         var fc_btn;
-                        if(type == 0){
+                        if(type == 0 && resObj.req == 0){
                             fc_btn = Range.addFactcheck.newDot(range_id);
                             Range.averageView(range_id, resObj.avg);
                         }else{
                             fc_btn = $('#b-'+range_id);
+                            $(fc_btn).unbind().removeClass('fc-req');
+                            Range.dotAction(fc_btn);
+                            Range.averageView(range_id, resObj.avg);
                         }
                         $(fc_btn).fadeIn(100);
                         Range.addFactcheck.animateDot(fc_btn);

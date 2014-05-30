@@ -272,7 +272,7 @@ def save_factcheck(request):
         )
         new_factcheck.save()
 
-        data = {'avg': rangeof.f_average}
+        data = {'avg': rangeof.f_average, 'req': rangeof.r_count}
         data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
         return HttpResponse(data_json)
     except:
@@ -373,7 +373,7 @@ def request_factcheck(request):
         else:
             requser = User.objects.get(id=request.user.id)
             range_id = request.GET.get('range_id', None)
-            
+
             range_obj = Range.objects.get(id=range_id)
             if requser in range_obj.req_users.all():
                 res_obj = json.dumps({'errno': 1, 'r_count': range_obj.r_count}, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
