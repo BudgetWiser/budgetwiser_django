@@ -240,7 +240,7 @@ Range.fcListView = function(range_id){
             for(var i=0; i<resObj.fc_list.length; i++){
                 var tag =
                     '<li>' +
-                        '<a href="' + resObj.fc_list[i].ref + '">' +
+                        '<a target="_blank" href="' + resObj.fc_list[i].ref + '">' +
                             '<span class="fc-ref-score">(' + (resObj.fc_list[i].score).toFixed(1) + ')</span>' +
                             '<span class="fc-ref-link">' + resObj.fc_list[i].ref + '</span>' +
                         '</a>' +
@@ -646,6 +646,7 @@ Range.addQuestion = function(range){
     Range.setTempRange(range);
     $(Range.sec_add_q).css(pos).fadeIn(100);
     $(Range.sec_add_q_input).focus();
+    $(Range.sec_add_q_submit).unbind('click');
 
     $(Range.sec_add_q_submit).bind('click', function(){
         var q_text = $(Range.sec_add_q_input).val();
@@ -660,25 +661,18 @@ Range.addQuestion = function(range){
                 },
                 success: function(resObj){
                     alert("성공적으로 등록되었습니다");
-                    console.log(resObj);
-                    console.log(resObj.pid);
                     Range.close(Range.sec_add_q);
                     //location.reload(true);
-
-                    /* Please refactor later */
                     var btnQuery = '#cmnt-summary-btn'+resObj.pid;
                     $('.opened').removeClass('opened');
                     $(btnQuery).addClass('opened');
-                    
                     var data = {'paragraph_id': resObj.pid};
-                    console.log(data);
                     $.ajax({
                         type: 'GET',
                         url: '/annote/api/loadcomments/',
                         data: data,
                         dataType: 'json',
                         success: function(resObj2) {
-                            console.log("댓글 열기")
                             Comment.loadComments(resObj2, resObj.pid);
                             var cmntNum = $("#cmnt-summary-"+resObj2.p_id+">span");
                             var currnum = cmntNum.html();

@@ -26,9 +26,11 @@
     color:#8d9396;
     margin-top:56px;
 }
+/*
 #title-section .title-date::before{
     content:"\00a0\00b7 ";
 }
+*/
 #title-section .title-name{
     font-size:28px;
     font-weight:700;
