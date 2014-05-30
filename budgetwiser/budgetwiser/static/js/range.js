@@ -419,6 +419,7 @@ Range.addRequest = function(range){
             dataType: 'json',
             success: function(resObj){
                 if(type == 0){
+                    Range.DATA[range_id] = range;
                     r_btn = Range.addFactcheck.newDot(range_id);
                     $(r_btn).addClass('fc-req');
                     Range.reqnumView(range_id, resObj.r_count);
@@ -503,6 +504,7 @@ Range.addFactcheck = function(range, r_id){
                     success: function(resObj){
                         var fc_btn;
                         if(type == 0 && resObj.req == 0){
+                            Range.DATA[range_id] = range;
                             fc_btn = Range.addFactcheck.newDot(range_id);
                             Range.averageView(range_id, resObj.avg);
                         }else{
