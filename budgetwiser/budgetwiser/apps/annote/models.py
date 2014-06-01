@@ -5,10 +5,16 @@ from django.contrib.auth.models import User
 class Article(models.Model):
     title = models.CharField(max_length=200)                # Title of the article
     subtitle = models.CharField(max_length=200, null=True, blank=True)             # Subtitle of the article
-    date = models.DateTimeField(auto_now=True)              # Written datetime of the article
+    date = models.DateTimeField()              # Written datetime of the article
     s_url = models.URLField(null=False)                     # Source URL
     s_name = models.CharField(max_length=20)                # Source Name
     user = models.ForeignKey(User, related_name="articles", null=True, blank=True)
+
+    # for survey links & lab study
+    pre_survey = models.URLField(null=True, blank=True)
+    post_survey = models.URLField(null=True, blank=True)
+    article_no = models.IntegerField(default=0)
+
 
     def __unicode__(self):
         return u'%s' % (self.title)
