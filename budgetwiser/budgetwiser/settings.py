@@ -38,6 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'budgetwiser',
     'budgetwiser.apps.annote',
+
+    # for DB Migration tool, SOUTH
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
