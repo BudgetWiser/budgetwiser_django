@@ -38,36 +38,37 @@
     <div id="close-wrapper"></div>
     <article id="article-wrapper">
         <div id="article-section">
+            <a id="pre-survey" class="survey" target="_blank" href="{{article.pre_survey}}">기사 읽기 전 설문 조사</a>
             {% for p in paragraphs %}
             <p id="p-{{p.id}}" class="article-paragraph">
                 {{p.content}}
             </p>
             {% endfor %}
-            <a id="survey" target="_blank" href="http://www.google.com">설문 조사</a>
+            <a id="post_survey" class="survey" target="_blank" href="{{article.post_survey}}">기사 읽은 후 설문 조사</a>
         </div>
         <div id="button-section"></div>
         <div id="fc-sum-section"></div>
         <div id="highlight-section"></div>
         <div id="menu-section">
             <div class="menu-button">
-                <button type="button" class="add-question">Add question</button>
-                <button type="button" class="add-factcheck">Add fact checker</button>
-                <button type="button" class="add-request">Add fact check request</button>
+                <button type="button" class="add-question" title="질문 남기기">Add question</button>
+                <button type="button" class="add-factcheck" title="신뢰 점수 매기기">Add fact checker</button>
+                <button type="button" class="add-request" title="사실 확인 요청하기">Add fact check request</button>
             </div>
             <div class="menu-req-button">
-                <button type="button" class="add-factcheck">Add fact checker</button>
-                <button type="button" class="add-request">Add fact check request</button>
+                <button type="button" class="add-factcheck" title="내가 사실 확인하기">Add fact checker</button>
+                <button type="button" class="add-request" title="나도 사실 확인 요청하기">Add fact check request</button>
             </div>
             <div class="menu-add-factcheck">
                 <div class="fc-score-input">
                     <h3>신뢰 점수 (0~5)</h3>
                     <div class="fc-score-input-section">
-                        <button type="button" class="score">0</button>
-                        <button type="button" class="score">1</button>
-                        <button type="button" class="score">2</button>
-                        <button type="button" class="score">3</button>
-                        <button type="button" class="score">4</button>
-                        <button type="button" class="score">5</button>
+                        <button type="button" class="score" title="0점">0</button>
+                        <button type="button" class="score" title="1점">1</button>
+                        <button type="button" class="score" title="2점">2</button>
+                        <button type="button" class="score" title="3점">3</button>
+                        <button type="button" class="score" title="4점">4</button>
+                        <button type="button" class="score" title="5점">5</button>
                     </div>
                     <div class="fc-score-criteria">
                         <span class="low">신뢰성이 낮음(0)</span>
@@ -117,7 +118,7 @@
         <ul id="commbtn-section">
             {% for p in paragraphs %}
             <li class="comment-summary" id="cmnt-summary-{{p.id}}">
-                <button type="button" id="cmnt-summary-btn{{p.id}}">comment button</button>
+                <button type="button" id="cmnt-summary-btn{{p.id}}" title="질문과 답변 보기">comment button</button>
                 <span class="comm-num">{{p.c_count}}</span>
             </li>
             {% endfor %}

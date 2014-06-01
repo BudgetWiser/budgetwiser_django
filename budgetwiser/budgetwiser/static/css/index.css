@@ -13,17 +13,22 @@
 
 /* SURVEY */
 
-#survey{
-    margin-top:120px;
+.survey{
     color:rgb(8,175,216);
     padding:10px;
     background:#efefef;
     border-radius:4px;
     display:inline-block;
 }
-#survey:hover{
+.survey:hover{
     background:#5f5f5f;
     color:#fff;
+}
+#pre-survey{
+    margin-bottom:40px;
+}
+#post-sruvey{
+    margin-top:120px;
 }
 
 /* TITLE */
@@ -77,6 +82,7 @@
     margin:0 auto;
     background:#fff;
     overflow:visible;
+    box-sizing:content-box;
 }
 #article-wrapper{
     float:left;
