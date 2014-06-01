@@ -17,7 +17,6 @@ def list(request):
             data = json.load(data_file)
         rand_id = randrange(len(data))
         rand_name = data[str(rand_id)]
-        print rand_id, rand_name
 
         if User.objects.filter(username=rand_name).count():
             user = authenticate(username=rand_name, password=rand_id)
@@ -78,7 +77,6 @@ def index(request, article_id):
                 'content': paragraph.content,
                 'num_comments': paragraph.comments.count(),
             }
-            print paragraph.comments.count()
             data['paragraphs'].append(p_data)
 
         data_json = json.dumps(data, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
@@ -209,14 +207,12 @@ def _load_comment(paragraph_id, session):
 
         comment_list.append(comment_obj)
 
-    print session
     ctx = {
         'session': session,
         'comments': comment_list,
         'p_id': paragraph.id,
         'c_count': paragraph.c_count,
     }
-    print ctx
 
     comment_list_json = json.dumps(ctx, ensure_ascii=False, indent=4, cls=DjangoJSONEncoder)
 
@@ -261,11 +257,9 @@ def save_factcheck(request):
         range_id = request.GET.get('range_id', None)
         rangeof = Range.objects.get(id=range_id)
         paragraph = rangeof.paragraph
-        print paragraph.id, rangeof.id
 
         score = request.GET.get('score', None)
         ref = request.GET.get('ref', None)
-        print score, ref
 
         new_factcheck = Factcheck(
             score = score,

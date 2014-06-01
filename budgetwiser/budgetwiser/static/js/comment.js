@@ -6,7 +6,6 @@ Comment.initialize = function(paragraph_id) {
 };
 
 Comment.loadComments = function(data, p_id) {
-    console.log(p_id);
     var username = data.session;
     var cmntdata = data.comments;
     Comment.cmntlist.html("");
@@ -60,7 +59,7 @@ Comment.loadQuestion = function(username, data) {
     family.append(Comment.loadAnswerButton(data['id']));
 
     Comment.cmntlist.append(family);
-    $('#cmnt-answer-add-'+data.id).append(Comment.loadAnswerInput(data.user, data.id));
+    $('#cmnt-answer-add-'+data.id).append(Comment.loadAnswerInput(username, data.id));
 
     //Comment.behaveInput(data['id']);
     Comment.generateAnswerInput(data['user'], data['id']);
@@ -122,7 +121,6 @@ Comment.loadAnswerButton = function(parent_id) {
 };
 
 Comment.loadAnswerInput = function(user, parent_id) {
-
     var tagAnswerInput = 
         '<div class="cmnt-answer" style="display:none;">' +
             '<img src="/media/res/img_user_r.png">' +
@@ -177,7 +175,6 @@ Comment.behaveInput = function(parent_id) {
             alert("답변을 입력해주세요!");
         }
         else if (inputRef.val() === "정보의 출처를 입력해주세요.") {
-            console.log(inputRef.val());
             data = {
                 'content': inputContent.val(),
                 'ref': '',
