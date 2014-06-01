@@ -429,4 +429,4 @@ def purge(request):
 
         return HttpResponse("PURGE PARAGRAPH COMPLETED")
     else:
-        return HttpResponseBadRequest("FUCK YOU")
+        return HttpResponseBadRequest("ERROR: Operation failed")
