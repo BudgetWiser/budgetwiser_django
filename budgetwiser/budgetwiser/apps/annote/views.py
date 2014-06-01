@@ -28,7 +28,7 @@ def list(request):
             user = authenticate(username=rand_name, password=rand_id)
             login(request, user)
 
-    articles = Article.objects.all()
+    articles = Article.objects.all().order_by('article_no')
     data = []
     for article in articles:
         item = {
@@ -68,6 +68,8 @@ def index(request, article_id):
             'url': article.s_url,
             'press': article.s_name,
             'paragraphs': [],
+            'pre_survey': article.pre_survey,
+            'post_survey': article.post_survey,
         }
 
         for paragraph in paragraphs:
@@ -212,6 +214,7 @@ def _load_comment(paragraph_id, session):
         'session': session,
         'comments': comment_list,
         'p_id': paragraph.id,
+        'c_count': paragraph.c_count,
     }
     print ctx
 

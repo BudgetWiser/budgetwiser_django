@@ -27,7 +27,7 @@ Article.btnCommentList = function() {
         var btnQuery = '#cmnt-summary-btn'+plist[i].id;
 
         $(btnQuery).click(function() {
-			/* Write the following action as function */
+            /* Write the following action as function */
             if($(this).hasClass('opened')){
                 Comment.cmntlist.html("");
                 $(this).removeClass('opened');
@@ -43,6 +43,7 @@ Article.btnCommentList = function() {
                     dataType: 'json',
                     success: function(resObj) {
                         Comment.loadComments(resObj, btnId);
+                        $('#cmnt-summary-'+btnId+'>span').html(resObj.c_count);
                     },
                     error: function(xhr) {
                         console.log(xhr.responseText);

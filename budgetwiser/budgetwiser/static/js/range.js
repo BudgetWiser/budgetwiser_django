@@ -40,6 +40,14 @@ Range.initialize = function(){
 
     Range.registerHandlers();
     Range.getRange();
+    Range.closeWrapper();
+};
+
+Range.closeWrapper = function(){
+    $(Range.close_wrapper).css({
+        'height': $(document).height(),
+        'width': $(document).width()
+    });
 };
 
 Range.close = function(elm){
@@ -60,6 +68,9 @@ Range.registerHandlers = function(){
         if($(event.target).parents().length <= 6){
             window.getSelection().removeAllRanges()
         }
+    });
+    $(window).resize(function(){
+        Range.closeWrapper();
     });
 };
 
@@ -99,7 +110,7 @@ Range.drawRange = function(obj){
         for(var j=0; j<rects.length; j++){
             var rect = rects[j];
             var pos = {
-                'top': rect.top - base_pos.top,
+                'top': rect.top - base_pos.top + $(document).scrollTop(),
                 'left': rect.left - base_pos.left,
                 'width': rect.width,
                 'height': rect.height
@@ -395,7 +406,7 @@ Range.menu = function(st, range){
 
         var base_pos = $(Range.wrapper).position();
         var menu_pos = {
-            'top': last_rect.top - base_pos.top + last_rect.height,
+            'top': last_rect.top - base_pos.top + last_rect.height + $(document).scrollTop(),
             'left': last_rect.left - base_pos.left + last_rect.width/2 - 54,
         };
         $(Range.sec_menu).css(menu_pos).fadeIn(100);
@@ -415,7 +426,7 @@ Range.setTempRange = function(range){
     for(var i=0; i<rects.length; i++){
         var temp_rect = $('<span></span>');
         var temp_rect_pos = {
-            'top': rects[i].top - base_pos.top,
+            'top': rects[i].top - base_pos.top + $(document).scrollTop(),
             'left': rects[i].left - base_pos.left,
             'width': rects[i].width,
             'height': rects[i].height,
@@ -444,12 +455,19 @@ Range.addRequest = function(range){
                     $(r_btn).addClass('fc-req');
                     Range.reqnumView(range_id, resObj.r_count);
                 }else{
+                    r_btn = $('#b-'+range_id);
+
+                    if(r_btn.length == 0){
+                        console.log(Range.DATA[range_id]);//for debug
+                        r_btn = Range.addFactcheck.newDot(range_id);
+                        $(r_btn).addClass('fc-req');
+                    }
+
                     if(resObj.errno == 1){
                         alert("이미 내가 사실 확인을 요청한 부분입니다.");
                     }else{
                         Range.reqnumView(range_id, resObj.r_count);
                     }
-                    r_btn = $('#b-'+range_id);
                 }
                 $(r_btn).fadeIn(100);
                 Range.addFactcheck.animateDot(r_btn);
@@ -474,7 +492,7 @@ Range.addFactcheck = function(range, r_id){
     var last_rect = rects[rects.length-1];
     var base_pos = $(Range.wrapper).position();
     var pos = {
-        'top': last_rect.top - base_pos.top + last_rect.height,
+        'top': last_rect.top - base_pos.top + last_rect.height + $(document).scrollTop(),
         'left': last_rect.left - base_pos.left + last_rect.width/2 - 100
     };
     if(r_id){
@@ -537,6 +555,11 @@ Range.addFactcheck = function(range, r_id){
                             Range.averageView(range_id, resObj.avg);
                         }else{
                             fc_btn = $('#b-'+range_id);
+                            if(fc_btn.length == 0){
+                                Range.DATA[range_id] = range;
+                                fc_btn = Range.addFactcheck.newDot(range_id);
+                                Range.averageView(range_id, resObj.avg);
+                            }
                             $(fc_btn).unbind().removeClass('fc-req');
                             Range.dotAction(fc_btn);
                             Range.averageView(range_id, resObj.avg);
@@ -651,7 +674,14 @@ Range.addRange = function(range, comp){
                 var hl = $('.temp-range').clone();
                 $(hl).removeClass('temp-range').addClass('r-' + resObj.id).hide();
                 $(Range.sec_range).append(hl);
+            }else{
+                if($('.r-' + resObj.id).length == 0){
+                    var hl = $('.temp-range').clone();
+                    $(hl).removeClass('temp-range').addClass('r-' + resObj.id).hide();
+                    $(Range.sec_range).append(hl);
+                }
             }
+            Range.DATA[resObj.id] = range;
             comp(resObj.id, resObj.type);
         },
         error: function(xhr){
@@ -667,7 +697,7 @@ Range.addQuestion = function(range){
     var last_rect = rects[rects.length-1];
     var base_pos = $(Range.wrapper).position();
     var pos = {
-        'top': last_rect.top - base_pos.top + last_rect.height,
+        'top': last_rect.top - base_pos.top + last_rect.height + $(document).scrollTop(),
         'left': last_rect.left - base_pos.left + last_rect.width/2 - 100
     };
 

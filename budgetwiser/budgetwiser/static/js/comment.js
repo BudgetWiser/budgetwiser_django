@@ -10,7 +10,6 @@ Comment.loadComments = function(data, p_id) {
     var username = data.session;
     var cmntdata = data.comments;
     Comment.cmntlist.html("");
-    console.log(p_id);
     $(Comment.cmntlist).css({'top':$('#p-'+p_id).position().top + 26});
 
     for (var i=0; i<cmntdata.length; i++) {
