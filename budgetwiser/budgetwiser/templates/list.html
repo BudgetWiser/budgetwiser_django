@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/list.css">
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/index.css">
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/list.css">
 {% endblock %}
 {% block js %}
 <script type="text/javascript" src="{{STATIC_URL}}js/autosize/jquery.autosize.min.js"></script>
@@ -16,6 +16,7 @@
 {% block content %}
 <div id="content-wrapper">
     <ul id="list-wrapper">
+    <a class="survey" target="_blank" href="../help" style="margin-bottom:20px;">HELP PAGE</a>
     <a class="survey" target="_blank" href="https://docs.google.com/forms/d/1GDLLkcEkuzm0MLSYHeirBtwykJUzJv8IMG_ykKrxozo/viewform?usp=send_form" style="margin-top:20px;">실험 전 설문 조사</a>
         <h3>안녕하세요! 당신은 "{{user}}"입니다. (랜덤한 포켓몬의 이름입니다.)<br><br>현재 등록되어 있는 기사들의 목록입니다.</h3>
         <div id="list-section">

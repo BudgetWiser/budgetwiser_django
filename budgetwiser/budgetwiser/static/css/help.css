@@ -1,0 +1,77 @@
+#content-wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    overflow: visible;
+}
+.instruction {
+    margin-bottom: 120px;
+    border-bottom: 2px solid #afafaf;
+}
+.instruction>h2 {
+    margin-bottom: 24px;
+    font-weight: bold;
+}
+.instruction>h3 {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+.instruction>h4 {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    font-weight: bold;
+}
+.instruction>h3>.emphasize {
+    float: left;
+    color: #08b0d8;
+}
+.instruction>a {
+    margin-bottom: 16px;
+    display: inline-block;
+    color: #08b0d8;
+    width: 100%;
+}
+.explanation {
+    padding-top: 20px;
+    border-top: 1px solid #afafaf;
+}
+.explanation>img {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+.explanation>span {
+    margin-bottom: 36px;
+    padding: 12px;
+    border: 1px solid #afafaf;
+    background: #f5f6f7;
+    display: inline-block;
+}
+#heading {
+    margin-top: 80px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+}
+#heading>h2 {
+    margin-bottom: 36px;
+    color: #08b0d8;
+}
+#heading>#table {
+    display: inline-block;
+    padding: 12px;
+    border: 1px solid #afafaf;
+    background: #f5f6f7;
+}
+#heading>#table>h3 {
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+#heading>#table>a {
+    margin-left: 16px;
+    margin-bottom: 6px;
+    font-size: 16px;
+    color: #000;
+}
+#footing>h3 {
+    margin-bottom: 100px;
+    color: #08b0d8;
+}

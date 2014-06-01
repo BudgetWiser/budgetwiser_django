@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/help.css">
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{STATIC_URL}}js/autosize/jquery.autosize.min.js"></script>
+{% endblock %}
+{% block content %}
+<div id="content-wrapper">
+    <div id="heading">
+        <h2>Budgetwiser를 이용해 능동적으로 기사를 읽는 방법을 알아보겠습니다.</h2>
+        <div id="table">
+            <h3>순서</h3>
+            <a href="#overview">0. 개요</a>
+            <a href="#qna">1. 질문과 답변</a>
+            <a href="#fact-checking">2. 사실 확인</a>
+        </div>
+    </div>
+    <div id="overview" class="instruction">
+        <h2>0. 개요</h2>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/0.1.jpg">
+            <span>메인 화면에서는 등록된 기사의 제목들을 볼 수 있습니다. 읽고 싶은 기사의 제목을 클릭해주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/0.2.jpg">
+            <span>선택한 기사로 들어가 Budgetwiser의 기능을 사용해주시면 됩니다.</span>
+        </div>
+        <a href="#" class="to-top">To Top</a>
+    </div>
+    <div id="qna" class="instruction">
+        <h2>1. 질문과 답변</h2>
+        <h3><span class="emphasize">[질문하기]</span> 기사의 내용에 대해 추가적으로 궁금한 점이 있을 때는 질문하기 기능을 이용해 주세요.</h3>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.a.1.jpg">
+            <span>궁금한 내용을 드래그하면 옵션 창이 나타납니다.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.a.2.jpg">
+            <span>가장 왼쪽의 버튼을 선택해 클릭해주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.a.3.jpg">
+            <span>질문을 입력하고 등록하기 버튼을 눌려주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.a.4.jpg">
+            <span>문단의 왼쪽에서 내가 한 질문을 볼 수 있습니다.</span>
+        </div>
+        <h3><span class="emphasize">[답변하기]</span> 답변할 수 있는 질문이 있는 경우 출처와 함께 답변해주세요.</h3>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.a.4.jpg">
+            <span>답변할 질문의 '답변 남기기' 버튼을 눌러주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.b.1.jpg">
+            <span>답변과 출처를 입력하고 '답변 남기기' 버튼을 눌러주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.b.2.jpg">
+            <span>질문 아래 쪽에 내가 남긴 답변을 확인할 수 있습니다.</span>
+        </div>
+        <h3><span class="emphasize">[기존의 질문과 답변 보기]</span> 각 단락별 관계된 질문과 답변들을 볼 수 있습니다.</h3>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.c.1.jpg">
+            <span>단락 오른쪽의 버튼에 마우스를 올리면 파랗게 변합니다. 질문과 답변을 보려면 버튼을 눌러주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.c.2.jpg">
+            <span>단락과 관련된 질문과 답변을 볼 수 있습니다.</span>
+        </div>
+        <h3><span class="emphasize">[이의제기 및 공감하기]</span> 남겨진 질문과 답변에 이의를 제기하거나 공감해주세요.</h3>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/1.d.1.jpg">
+            <span>질문과 답변에 대해 공감하거나 이의를 제기한 사용자 수를 확인할 수 있습니다.</span>
+        </div>
+        <a href="#" class="to-top">To Top</a>
+    </div> 
+    <div id="fact-checking" class="instruction">
+        <h2>2. 사실 확인 (Fact-checking)</h2>
+        <h3><span class="emphasize">[사실 확인 요청하기]</span> 기사의 내용 중 사실인지 궁금한 부분에 사실 확인을 요청하세요.</h3>
+        <h4>* 새로운 사실 확인 요청하기</h4>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.a.0.jpg">
+            <span>사실인지 알아보고 싶은 부분을 드래그하면 옵션 창이 나타납니다.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.a.1.jpg">
+            <span>가장 오른쪽의 버튼을 선택해 클릭해주세요.</span>
+        </div>
+        <h4>* 사실 확인 추가 요청하기</h4>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.a.2.jpg">
+            <span>다른 사람이 사실 확인을 요청한 부분은 주확색 동그라미로 표시됩니다.</span>
+        </div>
+        <div class="explanation">
+            <!--<img src="{{MEDIA_URL}}res/annote/help/2.a.3.jpg">-->
+            <span>주황색 동그라미에 마우스를 올리면 몇 명이 사실 확인을 요청했는지 알 수 있습니다.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.a.4.jpg">
+            <span>나도 사실이 궁금하다면, 동그라미를 클릭해 오른쪽 버튼을 선택해 클릭해주세요.</span>
+        </div>
+        <h3><span class="emphasize">[사실 확인하기]</span> 기사에 나온 내용의 사실여부를 확인해주세요.</h3>
+        <h4>* 새로운 사실에 대해 확인하기</h4>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.b.1.jpg">
+            <span>사실 여부를 확인할 부분을 드래그하면 옵션 창이 팝업됩니다. 가운데 버튼을 눌려주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.b.2.jpg">
+            <span>기사의 내용에 대해 신뢰 점수를 주고 정보의 출처를 남겨주세요.</span>
+        </div>
+        <h4>* 다른 사람의 사실 확인 요청에 대답하기</h4>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.b.3.jpg">
+            <span>주황색 동그라미에 마우스를 갖다대면 다른 사람이 사실확인을 요청한 내용을 볼 수 있습니다.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.b.4.jpg">
+            <span>동그라미를 클릭하여 왼쪽 버튼을 선택해 클릭해주세요.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.b.5.jpg">
+            <span>기사의 내용에 대해 신뢰 점수를 주고 정보의 출처를 남겨주세요.</span>
+        </div>
+        <h3><span class="emphasize">[신뢰 점수 보기]</span> 사실 여부에 대한 신뢰 점수를 볼 수 있습니다.</h3>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.c.1.jpg">
+            <span>노란색 동그라미는 신뢰도가 평가된 항목을 나타냅니다.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.c.2.jpg">
+            <span>노란색 동그라미에 마우스를 올리면 해당 항목의 평균 신뢰점수가 나타납니다.</span>
+        </div>
+        <div class="explanation">
+            <img src="{{MEDIA_URL}}res/annote/help/2.c.3.jpg">
+            <span>노란색 동그라미를 클릭하면 평균 신뢰점수, 평가한 사람의 수, 점수의 출처가 자세하게 표시됩니다.</span>
+        </div>
+        <a href="#" class="to-top">To Top</a>
+    </div>
+    <div id="footing">
+        <h3>지금까지 안내된 방법들을 통해 능동적으로 기사를 읽어보세요!</h3>
+    </div>
+</div>
+{% endblock %}

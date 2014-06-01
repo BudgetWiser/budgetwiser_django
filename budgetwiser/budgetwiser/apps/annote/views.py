@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.core.serializers.json import DjangoJSONEncoder
@@ -91,6 +91,9 @@ def index(request, article_id):
         return render_to_response('index.html', response_context, context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/annote/list/')
+
+def help(request):
+    return render(request, 'help.html')
 
 def get_range(request):
     try:
