@@ -2,8 +2,8 @@ from django.contrib import admin
 from budgetwiser.apps.annote.models import Article, Paragraph, Comment, Range, Factcheck
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'date', 's_name',)
-    ordering = ('id', 'date',)
+    list_display = ('article_no', 'title', 'date', 's_name',)
+    ordering = ('article_no', 'date',)
 
 class ParagraphAdmin(admin.ModelAdmin):
     list_display = ('id', 'article', 'content',)
