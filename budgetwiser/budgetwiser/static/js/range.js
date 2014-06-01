@@ -575,7 +575,7 @@ Range.addFactcheck = function(range, r_id){
                 });
             });
         }else{
-            alert("점수가 없거나, 근거가 바른 URL이 아닙니다.");
+            alert("점수가 없거나, 올바른 URL이 아닙니다.");
             $(this).html('등록하기').removeAttr('disabled').css({'color': '#08afd8', 'cursor': 'pointer'});
             $(Range.sec_add_f_close).show();
             $(Range.close_wrapper).show();
@@ -722,7 +722,6 @@ Range.addQuestion = function(range){
                     'range_id': range_id
                 },
                 success: function(resObj){
-                    alert("성공적으로 등록되었습니다");
                     Range.close(Range.sec_add_q);
                     $(Range.close_wrapper).hide();
                     //location.reload(true);

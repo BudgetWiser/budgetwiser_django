@@ -261,7 +261,6 @@ Comment.registerVote = function(comment_id) {
                     case 0:
                         var numGood = parseInt($("#cmnt-numgoods-"+comment_id).text());
                         document.getElementById("cmnt-numgoods-"+comment_id).innerHTML = (numGood+1)+"명";
-                        alert("댓글에 공감하였습니다.");
                         break;
                     case 1:
                         alert("이미 공감한 댓글입니다.");
@@ -290,7 +289,6 @@ Comment.registerVote = function(comment_id) {
                     case 0:
                         var numBad = parseInt($("#cmnt-numbads-"+comment_id).text());
                         document.getElementById("cmnt-numbads-"+comment_id).innerHTML = (numBad+1)+"명";
-                        alert("댓글에 이의를 제기하였습니다.");
                         break;
                     case 1:
                         alert("이미 이의를 제기한 댓글입니다.");
